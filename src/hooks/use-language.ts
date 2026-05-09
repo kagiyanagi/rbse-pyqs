@@ -7,7 +7,7 @@ export type LanguageMode = "english" | "hindi" | "both";
 export const LANGUAGE_CYCLE: LanguageMode[] = ["english", "hindi", "both"];
 
 export function useDefaultLanguage() {
-  return useLocalStorage<LanguageMode>("defaultLanguage", "both");
+  return useLocalStorage<LanguageMode>("defaultLanguage", "english");
 }
 
 export function useLanguageOverrides() {
