@@ -31,6 +31,7 @@ export function BookmarkPicker({ question }: { question: QuestionPayload }) {
             size="sm"
             className={cn("h-8 gap-1.5", isBookmarked && "text-amber-500")}
             aria-label="Bookmark"
+            data-action="bookmark"
           >
             <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
             <span className="hidden sm:inline">Bookmark</span>

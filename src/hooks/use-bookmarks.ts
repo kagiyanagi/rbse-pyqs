@@ -8,11 +8,16 @@ export type BookmarksState = {
   byCategory: Record<string, number[]>;
 };
 
-const DEFAULT_CATEGORIES = ["Important", "Hard", "Wrong", "Revise"];
+export const BUILTIN_CATEGORIES = ["Important", "Hard", "Wrong", "Revise"] as const;
+export type BuiltinCategory = (typeof BUILTIN_CATEGORIES)[number];
+
+export function isBuiltinCategory(name: string): name is BuiltinCategory {
+  return (BUILTIN_CATEGORIES as readonly string[]).includes(name);
+}
 
 const initial: BookmarksState = {
-  categories: [...DEFAULT_CATEGORIES],
-  byCategory: Object.fromEntries(DEFAULT_CATEGORIES.map((c) => [c, []])),
+  categories: [...BUILTIN_CATEGORIES],
+  byCategory: Object.fromEntries(BUILTIN_CATEGORIES.map((c) => [c, []])),
 };
 
 export function useBookmarks() {
@@ -50,6 +55,7 @@ export function useBookmarks() {
 
   const removeCategory = useCallback(
     (name: string) => {
+      if (isBuiltinCategory(name)) return;
       set((s) => {
         const next = { ...s.byCategory };
         delete next[name];

@@ -44,10 +44,12 @@ export function QuestionCard({
   q,
   onSolution,
   searchQuery,
+  focused = false,
 }: {
   q: QuestionPayload;
   onSolution: (q: QuestionPayload) => void;
   searchQuery: string;
+  focused?: boolean;
 }) {
   const { isAnswered, toggle: toggleAnswered } = useAnswered();
   const [defaultLang] = useDefaultLanguage();
@@ -72,11 +74,13 @@ export function QuestionCard({
 
   return (
     <div
+      data-question-id={q.id}
       className={cn(
         "group relative min-w-0 max-w-full overflow-hidden rounded-lg border bg-card p-4 shadow-sm",
         "transition-[opacity,box-shadow,border-color] duration-200 hover:border-foreground/15 hover:shadow-md",
         "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300",
         answered && "opacity-60",
+        focused && "border-primary/60 ring-2 ring-primary/30 ring-offset-2 ring-offset-background",
       )}
     >
       <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -171,6 +175,7 @@ export function QuestionCard({
           size="sm"
           className="h-8 gap-1.5"
           onClick={() => onSolution(q)}
+          data-action="solution"
         >
           <Lightbulb className="h-4 w-4" />
           <span className="hidden sm:inline">Solution</span>
@@ -180,6 +185,7 @@ export function QuestionCard({
           size="sm"
           className="h-8 gap-1.5"
           onClick={() => cycle(q.id, defaultLang)}
+          data-action="language"
         >
           <Languages className="h-4 w-4" />
           <span>{langSymbol(mode)}</span>
@@ -190,6 +196,7 @@ export function QuestionCard({
           size="sm"
           className={cn("h-8 gap-1.5", answered && "text-emerald-500")}
           onClick={() => toggleAnswered(q.id)}
+          data-action="answered"
         >
           <Check className={cn("h-4 w-4", answered && "stroke-[3]")} />
           <span className="hidden sm:inline">{answered ? "Answered" : "Mark answered"}</span>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { QuestionCard } from "./question-card";
 import { useAnswered } from "@/hooks/use-answered";
 import { useHideAnswered } from "@/hooks/use-settings";
+import { useCardKeyboardNav } from "@/hooks/use-card-keyboard-nav";
 import { cn } from "@/lib/utils";
 import type { QuestionPayload } from "@/types";
 
@@ -55,6 +56,8 @@ export function ResultsList({
   const start = (page - 1) * PAGE_SIZE;
   const end = Math.min(visible.length, start + PAGE_SIZE);
   const pageSlice = visible.slice(start, end);
+  const pageIds = useMemo(() => pageSlice.map((q) => q.id), [pageSlice]);
+  const { focusedId } = useCardKeyboardNav(pageIds);
 
   const goTo = (n: number) => {
     const clamped = Math.max(1, Math.min(totalPages, n));
@@ -93,7 +96,13 @@ export function ResultsList({
         <>
           <div className="grid min-w-0 gap-4">
             {pageSlice.map((q) => (
-              <QuestionCard key={q.id} q={q} onSolution={onSolution} searchQuery={searchQuery} />
+              <QuestionCard
+                key={q.id}
+                q={q}
+                onSolution={onSolution}
+                searchQuery={searchQuery}
+                focused={focusedId === q.id}
+              />
             ))}
           </div>
 
