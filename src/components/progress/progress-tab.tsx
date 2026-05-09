@@ -201,6 +201,17 @@ function SubjectBlock({ subject }: { subject: SubjectProgress }) {
               <ChapterBar key={c.chapter} row={c} />
             ))}
           </div>
+          {subject.outOfSyllabus.total > 0 && (
+            <div className="mt-2 flex items-center justify-between rounded-md border border-dashed bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+              <span>
+                + {subject.outOfSyllabus.total} older / out-of-syllabus question
+                {subject.outOfSyllabus.total === 1 ? "" : "s"} hidden from mastery
+              </span>
+              <span className="font-mono tabular-nums">
+                {subject.outOfSyllabus.answered}/{subject.outOfSyllabus.total} answered
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>
