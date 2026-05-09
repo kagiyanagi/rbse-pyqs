@@ -58,6 +58,8 @@ export function SettingsModal() {
       "rbse_answered",
       "rbse_language_overrides",
       "rbse_solutions",
+      "rbse_pfp",
+      "rbse_profile_name",
     ].forEach((k) => localStorage.removeItem(k));
     location.reload();
   };

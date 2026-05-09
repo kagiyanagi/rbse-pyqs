@@ -24,6 +24,10 @@ Required env vars:
 - `TURSO_AUTH_TOKEN` — `turso db tokens create <db>` output
 - `NEXT_PUBLIC_GA_ID` — optional GA4 measurement ID
 
+Optional (for accounts + cross-device sync):
+- `NEXT_PUBLIC_FIREBASE_*` — see [Firebase setup](#firebase-setup) below. The app
+  works fully without these; sign-in just won't be available.
+
 ## One-time data migration
 
 Schema is pushed straight from the Drizzle definition; data is copied row-by-row from the local `../questions.db` into Turso.
@@ -38,6 +42,65 @@ pnpm exec tsx scripts/migrate-from-sqlite.ts
 
 Re-run the migration anytime the upstream Python pipeline rebuilds `questions.db` — it truncates and re-inserts.
 
+## Firebase setup
+
+Auth + cross-device sync are optional. If `NEXT_PUBLIC_FIREBASE_*` vars are
+missing, the sign-in button is hidden and everything else works on
+`localStorage` alone.
+
+When you do enable Firebase:
+
+**1. Create a project** at [console.firebase.google.com](https://console.firebase.google.com).
+
+**2. Authentication → Sign-in method**
+- Enable **Google**.
+- Enable **Email/Password** (leave "Email link" off).
+- Under **User account linking**, choose **"Link accounts that use the same email"**.
+  This makes the link/unlink flow auto-merge same-email accounts.
+
+**3. Authentication → Settings → Authorized domains**
+- `localhost` is added by default.
+- Add your production domain when you deploy.
+
+**4. Firestore Database → Create database**
+- Pick **Production mode** (not Test mode) — we ship proper rules.
+- Choose a location close to your users (e.g. `asia-south1` for India).
+- Paste [`firestore.rules`](./firestore.rules) into **Firestore → Rules** and Publish.
+
+**5. Project settings → General → Your apps → Web app `</>`**
+- Register a web app and copy the `firebaseConfig` snippet.
+- Put each value into `.env.local`:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+```
+
+The Firebase web `apiKey` is **public by design** — it just identifies the
+project. Real security comes from the Firestore rules and the Authorized
+domains list.
+
+### What's stored where
+
+| Data | Where | Notes |
+|---|---|---|
+| Bookmarks, notes, answered, settings | `localStorage` + Firestore (when signed in) | Local-first; Firestore is a cross-device mirror |
+| First / last name | `localStorage` + Firestore | Synced |
+| Profile picture | `localStorage` only | Never uploaded to any server |
+| Gemini API key | `localStorage` only | Never synced |
+
+Firestore layout per user:
+
+```
+users/{uid}                            { firstName, lastName, updatedAt }
+users/{uid}/userdata/state             { bookmarks, bookmarkNotes, answered, settings, updatedAt }
+```
+
 ## Deploy to Vercel
 
 ```bash
@@ -46,6 +109,7 @@ vercel env add TURSO_DATABASE_URL
 vercel env add TURSO_AUTH_TOKEN
 # optional:
 vercel env add NEXT_PUBLIC_GA_ID
+# optional Firebase (one entry per NEXT_PUBLIC_FIREBASE_* key)
 vercel --prod
 ```
 
