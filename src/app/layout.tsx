@@ -1,0 +1,40 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { MathProvider } from "@/components/math-content";
+
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "RBSE Class 12 Question Bank",
+  description: "Browse RBSE Class 12 past-paper questions with filters, bookmarks, and AI solutions.",
+};
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-background font-sans text-foreground">
+        <ThemeProvider>
+          <MathProvider>{children}</MathProvider>
+        </ThemeProvider>
+        {GA_ID && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${GA_ID}');`}
+            </Script>
+          </>
+        )}
+      </body>
+    </html>
+  );
+}
