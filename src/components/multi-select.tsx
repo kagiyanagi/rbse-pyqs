@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -29,6 +29,14 @@ export function MultiSelect({
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open || !searchable) return;
+    const fine = typeof window !== "undefined"
+      && window.matchMedia?.("(pointer: fine)").matches;
+    if (fine) searchRef.current?.focus();
+  }, [open, searchable]);
 
   const normalized: Option[] = useMemo(
     () => options.map((o) => (typeof o === "string" ? { value: o } : o)),
@@ -66,15 +74,19 @@ export function MultiSelect({
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <PopoverContent
+          className="w-[var(--radix-popover-trigger-width)] p-0"
+          align="start"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <div className="p-2">
             {searchable && (
               <Input
+                ref={searchRef}
                 placeholder={`Search ${label.toLowerCase()}…`}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="h-8"
-                autoFocus
               />
             )}
           </div>
