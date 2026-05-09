@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { BookmarkIcon, Loader2, Moon, Search, Sun } from "lucide-react";
+import { BookmarkIcon, Moon, Search, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FilterBar } from "@/components/browse/filter-bar";
@@ -91,18 +91,17 @@ export default function HomePage() {
               </div>
             )}
             {loading && questions.length === 0 ? (
-              <div className="flex items-center justify-center rounded-lg border border-dashed bg-muted/30 p-12 text-muted-foreground">
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Loading questions…
-              </div>
+              <QuestionsSkeleton />
             ) : (
-              <ResultsList
-                questions={questions}
-                totalMarks={totalMarks}
-                onSolution={setSolutionFor}
-                searchQuery={searchQuery}
-                onSearchQueryChange={setSearchQuery}
-              />
+              <div className={loading ? "opacity-60 transition-opacity" : "transition-opacity"}>
+                <ResultsList
+                  questions={questions}
+                  totalMarks={totalMarks}
+                  onSolution={setSolutionFor}
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                />
+              </div>
             )}
           </TabsContent>
 
@@ -112,7 +111,7 @@ export default function HomePage() {
         </Tabs>
       </main>
 
-      <footer className="mt-8 border-t px-4 pt-6 pb-24 text-center font-mono text-[11px] leading-relaxed text-muted-foreground sm:pb-8 sm:text-sm">
+      <footer className="mt-8 border-t px-4 pt-6 pb-24 text-center font-mono text-[10px] leading-relaxed text-muted-foreground/70 sm:pb-8 sm:text-[11px]">
         <p className="mx-auto max-w-prose">
           Thanks for visiting! Make sure to give this a ★ on{" "}
           <a
@@ -150,6 +149,36 @@ export default function HomePage() {
 
       <TextSizePopover />
       <SolutionModal question={solutionFor} onClose={() => setSolutionFor(null)} />
+    </div>
+  );
+}
+
+function QuestionsSkeleton() {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="skeleton h-4 w-40" />
+        <div className="skeleton h-4 w-24" />
+      </div>
+      <div className="skeleton h-9 w-full" />
+      <div className="space-y-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-lg border bg-card p-4 shadow-sm"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div className="mb-2 flex items-center gap-2">
+              <div className="skeleton h-4 w-16" />
+              <div className="skeleton h-4 w-20" />
+              <div className="skeleton ml-auto h-4 w-12" />
+            </div>
+            <div className="skeleton mb-2 h-4 w-[92%]" />
+            <div className="skeleton mb-2 h-4 w-[78%]" />
+            <div className="skeleton h-4 w-[55%]" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

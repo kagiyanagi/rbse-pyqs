@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "./auth-context";
 import { readableAuthError } from "@/lib/firebase/errors";
+import { useToast } from "@/components/ui/toaster";
 
 type Props = {
   open: boolean;
@@ -46,6 +47,7 @@ function GoogleMark({ className }: { className?: string }) {
 
 export function AuthModal({ open, onOpenChange }: Props) {
   const auth = useAuth();
+  const toast = useToast();
   const [tab, setTab] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -83,6 +85,7 @@ export function AuthModal({ open, onOpenChange }: Props) {
     try {
       if (tab === "signup") {
         await auth.signUpWithEmail(email.trim(), password);
+        toast.info("Verify your email", `We sent a link to ${email.trim()}.`);
         close();
       } else {
         await auth.signInWithEmail(email.trim(), password);
@@ -106,6 +109,7 @@ export function AuthModal({ open, onOpenChange }: Props) {
     try {
       await auth.resetPassword(email.trim());
       setInfo(`Reset link sent to ${email.trim()}`);
+      toast.success("Reset email sent", email.trim());
     } catch (er) {
       setErr(readableAuthError(er));
     } finally {
@@ -167,7 +171,7 @@ export function AuthModal({ open, onOpenChange }: Props) {
             <TabsTrigger value="signup" className="flex-1">Create account</TabsTrigger>
           </TabsList>
 
-          <form onSubmit={onEmail} className="mt-3 space-y-3">
+          <form onSubmit={onEmail} className="mt-3 flex flex-col gap-3">
             <TabsContent value="signin" className="m-0 space-y-3">
               <div className="space-y-1.5">
                 <Label htmlFor="auth-email">Email</Label>

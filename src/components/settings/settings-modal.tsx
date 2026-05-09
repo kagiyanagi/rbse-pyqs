@@ -33,6 +33,7 @@ import {
 } from "@/hooks/use-settings";
 import { useDefaultLanguage, type LanguageMode } from "@/hooks/use-language";
 import { useSolutionCache } from "@/hooks/use-solutions";
+import { useToast } from "@/components/ui/toaster";
 
 export function SettingsModal() {
   const { theme, setTheme } = useTheme();
@@ -42,6 +43,7 @@ export function SettingsModal() {
   const [model, setModel] = useGeminiModel();
   const [template, setTemplate] = usePromptTemplate();
   const { count: solutionCount, clear: clearSolutions } = useSolutionCache();
+  const toast = useToast();
 
   const resetAll = () => {
     if (!confirm("Reset all settings, bookmarks, and answered status?")) return;
@@ -193,7 +195,10 @@ export function SettingsModal() {
               size="sm"
               disabled={solutionCount === 0}
               onClick={() => {
-                if (confirm(`Clear all ${solutionCount} saved solutions?`)) clearSolutions();
+                if (confirm(`Clear all ${solutionCount} saved solutions?`)) {
+                  clearSolutions();
+                  toast.info(`Cleared ${solutionCount} saved solutions`);
+                }
               }}
             >
               Clear

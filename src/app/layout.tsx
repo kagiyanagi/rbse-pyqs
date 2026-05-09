@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { MathProvider } from "@/components/math-content";
 import { AuthProvider } from "@/components/auth/auth-context";
 import { SyncBridge } from "@/components/auth/sync-bridge";
+import { ToasterProvider } from "@/components/ui/toaster";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -44,10 +45,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         <ThemeProvider>
-          <AuthProvider>
-            <MathProvider>{children}</MathProvider>
-            <SyncBridge />
-          </AuthProvider>
+          <ToasterProvider>
+            <AuthProvider>
+              <MathProvider>{children}</MathProvider>
+              <SyncBridge />
+            </AuthProvider>
+          </ToasterProvider>
         </ThemeProvider>
         {GA_ID && (
           <>
