@@ -113,13 +113,25 @@ export function FilterBar({
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="flex flex-col gap-1.5">
-          <Label className="text-xs">From year: <span className="tabular-nums">{filter.min_year ?? YEAR_MIN}</span></Label>
+          <Label className="text-xs">
+            Year:{" "}
+            <span className="tabular-nums">{filter.min_year ?? YEAR_MIN}</span>
+            {" – "}
+            <span className="tabular-nums">{filter.max_year ?? YEAR_MAX}</span>
+          </Label>
           <Slider
             min={YEAR_MIN}
             max={YEAR_MAX}
             step={1}
-            value={[filter.min_year ?? YEAR_MIN]}
-            onValueChange={([v]) => update("min_year", v === YEAR_MIN ? null : v)}
+            minStepsBetweenThumbs={0}
+            value={[filter.min_year ?? YEAR_MIN, filter.max_year ?? YEAR_MAX]}
+            onValueChange={([lo, hi]) =>
+              onFilterChange({
+                ...filter,
+                min_year: lo === YEAR_MIN ? null : lo,
+                max_year: hi === YEAR_MAX ? null : hi,
+              })
+            }
           />
         </div>
 

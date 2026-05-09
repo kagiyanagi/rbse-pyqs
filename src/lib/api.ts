@@ -28,6 +28,7 @@ export const api = {
     for (const m of filter.marks_list) sp.append("marks_list", m);
     for (const q of filter.question_types) sp.append("question_types", q);
     if (filter.min_year != null) sp.set("min_year", String(filter.min_year));
+    if (filter.max_year != null) sp.set("max_year", String(filter.max_year));
     sp.set("order", filter.order);
     if (filter.target_marks_total != null) sp.set("target_marks_total", String(filter.target_marks_total));
     else sp.set("count", String(filter.count));
@@ -42,6 +43,7 @@ export type QuestionFilter = {
   marks_list: string[];
   question_types: string[];
   min_year: number | null;
+  max_year: number | null;
   order: "newest" | "oldest" | "random" | "marks_asc" | "marks_desc";
   count: number;
   target_marks_total: number | null;
@@ -54,6 +56,7 @@ export const DEFAULT_FILTER: QuestionFilter = {
   marks_list: [],
   question_types: [],
   min_year: null,
+  max_year: null,
   order: "newest",
   count: 10,
   target_marks_total: null,

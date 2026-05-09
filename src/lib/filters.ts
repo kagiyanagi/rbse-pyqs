@@ -1,4 +1,4 @@
-import { and, eq, gte, inArray, isNotNull, ne, or, type SQL } from "drizzle-orm";
+import { and, eq, gte, inArray, isNotNull, lte, ne, or, type SQL } from "drizzle-orm";
 import { questions } from "@/db/schema";
 import type { SortOrder } from "@/types";
 
@@ -48,6 +48,7 @@ export function buildWhere(searchParams: URLSearchParams): SQL | undefined {
   const marksList = getMulti(searchParams, "marks_list", "marks");
   const qtypes = getMulti(searchParams, "question_types", "question_type");
   const minYearRaw = searchParams.get("min_year");
+  const maxYearRaw = searchParams.get("max_year");
 
   const parts: Array<SQL | undefined> = [];
   if (subjects.length) parts.push(inArray(questions.subject, subjects));
@@ -58,6 +59,10 @@ export function buildWhere(searchParams: URLSearchParams): SQL | undefined {
   if (minYearRaw) {
     const v = parseInt(minYearRaw, 10);
     if (!Number.isNaN(v)) parts.push(gte(questions.year, v));
+  }
+  if (maxYearRaw) {
+    const v = parseInt(maxYearRaw, 10);
+    if (!Number.isNaN(v)) parts.push(lte(questions.year, v));
   }
 
   const filtered = parts.filter((p): p is SQL => Boolean(p));

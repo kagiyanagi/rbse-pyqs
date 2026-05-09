@@ -59,6 +59,7 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
         marks_list: [],
         question_types: [],
         min_year: null,
+        max_year: null,
         order: "newest",
         count: 5000,
         target_marks_total: null,
