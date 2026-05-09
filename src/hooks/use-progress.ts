@@ -4,13 +4,25 @@ import { useEffect, useMemo, useState } from "react";
 import { useAnswered } from "./use-answered";
 import { useSolutionCache } from "./use-solutions";
 
+export type SubjectGroup = {
+  currentSyllabus: Record<string, number[]>;
+  outOfSyllabus: number[];
+};
+
 export type ProgressIndex = {
-  subjects: Record<string, Record<string, number[]>>;
+  subjects: Record<string, SubjectGroup>;
 };
 
 export type ChapterProgress = {
   subject: string;
   chapter: string;
+  total: number;
+  answered: number;
+  seen: number;
+  percent: number;
+};
+
+export type OutOfSyllabusStats = {
   total: number;
   answered: number;
   seen: number;
@@ -24,6 +36,7 @@ export type SubjectProgress = {
   seen: number;
   percent: number;
   chapters: ChapterProgress[];
+  outOfSyllabus: OutOfSyllabusStats;
 };
 
 let _cached: ProgressIndex | null = null;
@@ -84,8 +97,11 @@ export function useProgress(active: boolean = true) {
 
   const subjects = useMemo<SubjectProgress[]>(() => {
     if (!index) return [];
-    const list = Object.entries(index.subjects).map(([subject, chapters]) => {
-      const chapterRows: ChapterProgress[] = Object.entries(chapters).map(
+    const list = Object.entries(index.subjects).map(([subject, group]) => {
+      const cur = group.currentSyllabus ?? {};
+      const oos = group.outOfSyllabus ?? [];
+
+      const chapterRows: ChapterProgress[] = Object.entries(cur).map(
         ([chapter, ids]) => {
           let answered = 0;
           let seen = 0;
@@ -107,9 +123,19 @@ export function useProgress(active: boolean = true) {
         if (b.percent !== a.percent) return b.percent - a.percent;
         return b.total - a.total;
       });
+
       const total = chapterRows.reduce((s, c) => s + c.total, 0);
       const answered = chapterRows.reduce((s, c) => s + c.answered, 0);
       const seen = chapterRows.reduce((s, c) => s + c.seen, 0);
+
+      let oosAnswered = 0;
+      let oosSeen = 0;
+      for (const id of oos) {
+        if (answeredSet.has(id)) oosAnswered++;
+        if (seenSet.has(id)) oosSeen++;
+      }
+      const oosTotal = oos.length;
+
       return {
         subject,
         total,
@@ -117,6 +143,12 @@ export function useProgress(active: boolean = true) {
         seen,
         percent: total > 0 ? (answered / total) * 100 : 0,
         chapters: chapterRows,
+        outOfSyllabus: {
+          total: oosTotal,
+          answered: oosAnswered,
+          seen: oosSeen,
+          percent: oosTotal > 0 ? (oosAnswered / oosTotal) * 100 : 0,
+        },
       } satisfies SubjectProgress;
     });
     list.sort((a, b) => a.subject.localeCompare(b.subject));

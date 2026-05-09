@@ -2,12 +2,45 @@ import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/db/client";
 import { questions } from "@/db/schema";
 import { sql, asc, desc } from "drizzle-orm";
-import { buildWhere, parseInt32, parseFloatClamp, parseOrder } from "@/lib/filters";
+import { buildWhere, getMulti, parseInt32, parseFloatClamp, parseOrder } from "@/lib/filters";
 import { getProbCache } from "@/lib/prob-cache";
+import {
+  CANONICAL_SUBJECTS,
+  OUT_OF_SYLLABUS,
+  canonicalSubject,
+} from "@/lib/syllabus";
+import { getChapterAliases } from "@/lib/syllabus-aliases";
 import { chapterKey, type QuestionPayload, type QuestionsResponse } from "@/types";
 
 export async function GET(request: NextRequest) {
-  const sp = request.nextUrl.searchParams;
+  const sp = new URLSearchParams(request.nextUrl.searchParams);
+
+  // Expand canonical chapter filters to all matching raw DB variants.
+  const requestedChapters = getMulti(sp, "chapters", "chapter");
+  if (requestedChapters.length > 0) {
+    const aliases = await getChapterAliases();
+    const requestedSubjects = getMulti(sp, "subjects", "subject");
+    const subjectScope = requestedSubjects.length > 0 ? requestedSubjects : CANONICAL_SUBJECTS;
+    const expanded = new Set<string>();
+    for (const ch of requestedChapters) {
+      // OOS bucket → union of all raw chapters that mapped to OOS in any subject in scope.
+      const isOOS = ch === OUT_OF_SYLLABUS;
+      for (const s of subjectScope) {
+        const subj = canonicalSubject(s);
+        if (!subj) continue;
+        const variants = aliases.get(`${subj}|${ch}`) ?? [];
+        for (const v of variants) expanded.add(v);
+        if (isOOS) {
+          // already included via OUT_OF_SYLLABUS key above
+        }
+      }
+      if (!isOOS) expanded.add(ch); // honour exact-match too
+    }
+    sp.delete("chapters");
+    sp.delete("chapter");
+    for (const v of expanded) sp.append("chapters", v);
+  }
+
   const where = buildWhere(sp);
   const order = parseOrder(sp.get("order"));
   const count = parseInt32(sp.get("count"), 10, 1, 5000);
