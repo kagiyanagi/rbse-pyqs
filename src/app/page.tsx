@@ -45,7 +45,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b bg-background/95">
         <div className="container mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
           <h1 className="text-base font-semibold sm:text-lg">RBSE Q-Bank</h1>
           {stats && (
