@@ -7,6 +7,7 @@ import { MathProvider } from "@/components/math-content";
 import { AuthProvider } from "@/components/auth/auth-context";
 import { SyncBridge } from "@/components/auth/sync-bridge";
 import { ToasterProvider } from "@/components/ui/toaster";
+import { KeyboardHelp } from "@/components/keyboard-help";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <MathProvider>{children}</MathProvider>
               <SyncBridge />
             </AuthProvider>
+            <KeyboardHelp />
           </ToasterProvider>
         </ThemeProvider>
         {GA_ID && (

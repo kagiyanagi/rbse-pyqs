@@ -51,5 +51,5 @@ export function useSolutionCache() {
 
   const clear = useCallback(() => set(initial), [set]);
 
-  return { get, save, remove, clear, count: cache.ids.length, hydrated };
+  return { get, save, remove, clear, ids: cache.ids, count: cache.ids.length, hydrated };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Eraser, NotebookPen, Trash2 } from "lucide-react";
+import { CheckCircle2, Eraser, Lightbulb, NotebookPen, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,15 +14,34 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useBookmarks } from "@/hooks/use-bookmarks";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { isBuiltinCategory, useBookmarks } from "@/hooks/use-bookmarks";
 import { useAnswered } from "@/hooks/use-answered";
 import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
+import { useSolutionCache } from "@/hooks/use-solutions";
+import { useCardKeyboardNav } from "@/hooks/use-card-keyboard-nav";
 import { QuestionCard } from "@/components/browse/question-card";
 import { api } from "@/lib/api";
 import type { QuestionPayload } from "@/types";
 
 const ANSWERED = "✅ Answered";
 const NOTES = "📝 Notes";
+const SOLUTIONS = "💡 Solutions";
+
+type SortMode = "lastAdded" | "firstAdded" | "year" | "random";
+
+const SORT_LABELS: Record<SortMode, string> = {
+  lastAdded: "Last added",
+  firstAdded: "First added",
+  year: "By year",
+  random: "Random",
+};
 
 type ConfirmKind = "clear" | "delete";
 type Confirm = {
@@ -31,21 +50,34 @@ type Confirm = {
   count: number;
 };
 
+function shuffle<T>(arr: readonly T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) => void }) {
   const { state, removeCategory, addCategory, clearCategory } = useBookmarks();
   const { ids: answeredIds, clear: clearAnswered } = useAnswered();
   const { ids: noteIds, clearAll: clearAllNotes } = useBookmarkNotes();
+  const { ids: solutionIds, clear: clearAllSolutions, count: solutionCount } = useSolutionCache();
   const [active, setActive] = useState<string>(state.categories[0] ?? ANSWERED);
   const [newCat, setNewCat] = useState("");
   const [questions, setQuestions] = useState<QuestionPayload[]>([]);
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState<Confirm | null>(null);
+  const [sort, setSort] = useState<SortMode>("lastAdded");
+  const [shuffleTick, setShuffleTick] = useState(0);
 
   const allIds: number[] = useMemo(() => {
     if (active === ANSWERED) return answeredIds;
     if (active === NOTES) return noteIds;
+    if (active === SOLUTIONS) return solutionIds;
     return state.byCategory[active] ?? [];
-  }, [active, state, answeredIds, noteIds]);
+  }, [active, state, answeredIds, noteIds, solutionIds]);
 
   useEffect(() => {
     setQuestions([]);
@@ -80,6 +112,7 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
     } else {
       if (confirm.category === ANSWERED) clearAnswered();
       else if (confirm.category === NOTES) clearAllNotes();
+      else if (confirm.category === SOLUTIONS) clearAllSolutions();
       else clearCategory(confirm.category);
     }
     setConfirm(null);
@@ -90,7 +123,33 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
       ? answeredIds.length
       : active === NOTES
         ? noteIds.length
-        : state.byCategory[active]?.length ?? 0;
+        : active === SOLUTIONS
+          ? solutionCount
+          : state.byCategory[active]?.length ?? 0;
+
+  const orderedQuestions = useMemo(() => {
+    if (questions.length === 0) return questions;
+    const byId = new Map(questions.map((q) => [q.id, q]));
+    if (sort === "year") {
+      return [...questions].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+    }
+    if (sort === "random") {
+      // Reference shuffleTick so reshuffles are explicit.
+      void shuffleTick;
+      return shuffle(questions);
+    }
+    const ordered =
+      sort === "lastAdded" ? [...allIds].reverse() : allIds;
+    const result: QuestionPayload[] = [];
+    for (const id of ordered) {
+      const q = byId.get(id);
+      if (q) result.push(q);
+    }
+    return result;
+  }, [questions, allIds, sort, shuffleTick]);
+
+  const orderedIds = useMemo(() => orderedQuestions.map((q) => q.id), [orderedQuestions]);
+  const { focusedId } = useCardKeyboardNav(orderedIds);
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_1fr]">
@@ -99,6 +158,7 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
         <div className="space-y-1">
           {state.categories.map((c) => {
             const count = state.byCategory[c]?.length ?? 0;
+            const builtin = isBuiltinCategory(c);
             return (
               <div key={c} className="group flex items-center">
                 <button
@@ -110,15 +170,17 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
                   <span>{c}</span>
                   <span className="text-xs text-muted-foreground">{count}</span>
                 </button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-7 w-7 opacity-0 group-hover:opacity-100"
-                  aria-label={`Delete category ${c}`}
-                  onClick={() => setConfirm({ kind: "delete", category: c, count })}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                {!builtin && (
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-7 w-7 opacity-0 group-hover:opacity-100"
+                    aria-label={`Delete category ${c}`}
+                    onClick={() => setConfirm({ kind: "delete", category: c, count })}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                )}
               </div>
             );
           })}
@@ -145,6 +207,18 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
               Notes
             </span>
             <span className="text-xs text-muted-foreground">{noteIds.length}</span>
+          </button>
+          <button
+            className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm hover:bg-accent ${
+              active === SOLUTIONS ? "bg-accent" : ""
+            }`}
+            onClick={() => setActive(SOLUTIONS)}
+          >
+            <span className="flex items-center gap-1.5">
+              <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
+              Solutions
+            </span>
+            <span className="text-xs text-muted-foreground">{solutionCount}</span>
           </button>
         </div>
         <div className="flex items-center gap-1 border-t pt-3">
@@ -174,23 +248,55 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
       </aside>
 
       <div>
-        <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-muted-foreground">
             <span className="font-medium text-foreground">{active}</span> · {questions.length} question
             {questions.length === 1 ? "" : "s"}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5"
-            disabled={activeCount === 0}
-            onClick={() =>
-              setConfirm({ kind: "clear", category: active, count: activeCount })
-            }
-          >
-            <Eraser className="h-3.5 w-3.5" />
-            Clear
-          </Button>
+          <div className="flex items-center gap-2">
+            <Select
+              value={sort}
+              onValueChange={(v) => {
+                const next = v as SortMode;
+                setSort(next);
+                if (next === "random") setShuffleTick((t) => t + 1);
+              }}
+            >
+              <SelectTrigger className="h-8 w-auto gap-1.5 px-2.5 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.keys(SORT_LABELS) as SortMode[]).map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {SORT_LABELS[s]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {sort === "random" && questions.length > 1 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs"
+                onClick={() => setShuffleTick((t) => t + 1)}
+                title="Reshuffle"
+              >
+                Shuffle
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              disabled={activeCount === 0}
+              onClick={() =>
+                setConfirm({ kind: "clear", category: active, count: activeCount })
+              }
+            >
+              <Eraser className="h-3.5 w-3.5" />
+              Clear
+            </Button>
+          </div>
         </div>
         {loading ? (
           <div className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
@@ -202,12 +308,20 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
               ? "No notes yet. Open a question's bookmark menu and choose “Add note” to start one."
               : active === ANSWERED
                 ? "No answered questions yet. Mark one from the Browse tab."
-                : "Nothing here yet. Bookmark questions from the Browse tab."}
+                : active === SOLUTIONS
+                  ? "No solutions yet. Generate one for any question and it'll show up here."
+                  : "Nothing here yet. Bookmark questions from the Browse tab."}
           </div>
         ) : (
           <div className="grid min-w-0 gap-4">
-            {questions.map((q) => (
-              <QuestionCard key={q.id} q={q} onSolution={onSolution} searchQuery="" />
+            {orderedQuestions.map((q) => (
+              <QuestionCard
+                key={q.id}
+                q={q}
+                onSolution={onSolution}
+                searchQuery=""
+                focused={focusedId === q.id}
+              />
             ))}
           </div>
         )}
@@ -234,9 +348,13 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
                     ? `This unmarks all ${confirm.count} answered question${
                         confirm.count === 1 ? "" : "s"
                       }.`
-                    : `This removes all ${confirm?.count ?? 0} bookmark${
-                        confirm?.count === 1 ? "" : "s"
-                      } from this category. The category itself is kept.`}
+                    : confirm?.category === SOLUTIONS
+                      ? `This clears all ${confirm.count} cached solution${
+                          confirm.count === 1 ? "" : "s"
+                        }. The questions themselves are not deleted.`
+                      : `This removes all ${confirm?.count ?? 0} bookmark${
+                          confirm?.count === 1 ? "" : "s"
+                        } from this category. The category itself is kept.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
