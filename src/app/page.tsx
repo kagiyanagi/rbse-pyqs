@@ -11,6 +11,7 @@ import { BookmarksTab } from "@/components/bookmarks/bookmarks-tab";
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { SolutionModal } from "@/components/solution/solution-modal";
 import { TextSizePopover } from "@/components/text-size-popover";
+import { AuthButton } from "@/components/auth/auth-button";
 import { api, DEFAULT_FILTER, type QuestionFilter } from "@/lib/api";
 import type { QuestionPayload, StatsResponse } from "@/types";
 
@@ -64,6 +65,7 @@ export default function HomePage() {
               <Moon className="hidden h-5 w-5 dark:block" />
             </Button>
             <SettingsModal />
+            <AuthButton />
           </div>
         </div>
       </header>
