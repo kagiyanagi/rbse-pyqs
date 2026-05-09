@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -11,6 +11,24 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   title: "RBSE Class 12 Question Bank",
   description: "Browse RBSE Class 12 past-paper questions with filters, bookmarks, and AI solutions.",
+  applicationName: "RBSE Q-Bank",
+  appleWebApp: {
+    capable: true,
+    title: "RBSE Q-Bank",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1f1f1f" },
+  ],
 };
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
