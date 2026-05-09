@@ -26,6 +26,7 @@ import { AvatarCropper } from "./avatar-cropper";
 import { useAuth, type AuthMethod } from "./auth-context";
 import { useProfileName, usePfp } from "@/hooks/use-pfp";
 import { readableAuthError } from "@/lib/firebase/errors";
+import { useToast } from "@/components/ui/toaster";
 
 type Props = {
   open: boolean;
@@ -39,6 +40,7 @@ const METHOD_LABELS: Record<AuthMethod, string> = {
 
 export function ProfileModal({ open, onOpenChange }: Props) {
   const auth = useAuth();
+  const toast = useToast();
   const [profileName, setProfileName] = useProfileName();
   const [pfp, setPfp] = usePfp();
 
@@ -98,8 +100,10 @@ export function ProfileModal({ open, onOpenChange }: Props) {
       const display = [f, lastName.trim()].filter(Boolean).join(" ");
       await auth.updateDisplayName(display);
       setNameOk(true);
+      toast.success("Name updated", display);
     } catch (e) {
       setNameErr(readableAuthError(e));
+      toast.error("Couldn't save name", readableAuthError(e));
     } finally {
       setSavingName(false);
     }
@@ -116,8 +120,11 @@ export function ProfileModal({ open, onOpenChange }: Props) {
     setLinkErr(null);
     try {
       await auth.linkGoogle();
+      toast.success("Google linked", "You can now sign in with Google too.");
     } catch (e) {
-      setLinkErr(readableAuthError(e));
+      const msg = readableAuthError(e);
+      setLinkErr(msg);
+      toast.error("Couldn't link Google", msg);
     } finally {
       setLinking(null);
     }
@@ -143,8 +150,11 @@ export function ProfileModal({ open, onOpenChange }: Props) {
       setShowAddPwd(false);
       setAddPwd("");
       setAddPwd2("");
+      toast.success("Password added", "You can now sign in with email + password.");
     } catch (e) {
-      setLinkErr(readableAuthError(e));
+      const msg = readableAuthError(e);
+      setLinkErr(msg);
+      toast.error("Couldn't add password", msg);
     } finally {
       setLinking(null);
     }
@@ -156,8 +166,11 @@ export function ProfileModal({ open, onOpenChange }: Props) {
     setLinkErr(null);
     try {
       await auth.unlinkMethod(m);
+      toast.info(`${METHOD_LABELS[m]} unlinked`);
     } catch (e) {
-      setLinkErr(readableAuthError(e));
+      const msg = readableAuthError(e);
+      setLinkErr(msg);
+      toast.error("Couldn't unlink", msg);
     } finally {
       setLinking(null);
     }
@@ -168,8 +181,9 @@ export function ProfileModal({ open, onOpenChange }: Props) {
     try {
       await auth.resendVerification();
       setVerifySent(true);
-    } catch {
-      // ignore
+      toast.success("Verification email sent", u.email ?? undefined);
+    } catch (e) {
+      toast.error("Couldn't send email", readableAuthError(e));
     } finally {
       setVerifyBusy(false);
     }
@@ -226,7 +240,10 @@ export function ProfileModal({ open, onOpenChange }: Props) {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    if (confirm("Remove profile picture?")) setPfp("");
+                    if (confirm("Remove profile picture?")) {
+                      setPfp("");
+                      toast.info("Profile picture removed");
+                    }
                   }}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -251,6 +268,7 @@ export function ProfileModal({ open, onOpenChange }: Props) {
                 onSave={(dataUrl) => {
                   setPfp(dataUrl);
                   setPickFile(null);
+                  toast.success("Profile picture saved", "Stored on this device only.");
                 }}
               />
             </div>

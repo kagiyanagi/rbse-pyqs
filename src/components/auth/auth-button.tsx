@@ -50,7 +50,7 @@ export function AuthButton() {
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full outline-none transition-transform active:translate-y-px focus-visible:ring-3 focus-visible:ring-ring/50"
             aria-label="Account"
           >
             <Avatar

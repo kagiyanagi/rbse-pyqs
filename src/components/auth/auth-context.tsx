@@ -29,6 +29,7 @@ import {
   type User,
 } from "firebase/auth";
 import { firebaseAuth, isFirebaseConfigured } from "@/lib/firebase/client";
+import { useToast } from "@/components/ui/toaster";
 
 export type AuthMethod = "google.com" | "password";
 
@@ -60,6 +61,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const tickRef = useRef(0);
   const [, force] = useState(0);
+  const toast = useToast();
+  const initialResolvedRef = useRef(false);
+  const prevUidRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
@@ -73,6 +77,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     return unsub;
   }, []);
+
+  // Toast on sign-in / sign-out transitions (skip initial session restore).
+  useEffect(() => {
+    if (loading) return;
+    const cur = user?.uid ?? null;
+    if (!initialResolvedRef.current) {
+      initialResolvedRef.current = true;
+      prevUidRef.current = cur;
+      return;
+    }
+    if (prevUidRef.current && !cur) {
+      toast.info("Signed out", "Local data is still on this device.");
+    } else if (!prevUidRef.current && cur) {
+      toast.success("Signed in", user?.email ?? user?.displayName ?? undefined);
+    }
+    prevUidRef.current = cur;
+  }, [user, loading, toast]);
 
   const refresh = useCallback(() => {
     tickRef.current++;
