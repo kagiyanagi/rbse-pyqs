@@ -73,7 +73,9 @@ export function QuestionCard({
   return (
     <div
       className={cn(
-        "group relative min-w-0 max-w-full overflow-hidden rounded-lg border bg-card p-4 shadow-sm transition-opacity",
+        "group relative min-w-0 max-w-full overflow-hidden rounded-lg border bg-card p-4 shadow-sm",
+        "transition-[opacity,box-shadow,border-color] duration-200 hover:border-foreground/15 hover:shadow-md",
+        "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300",
         answered && "opacity-60",
       )}
     >

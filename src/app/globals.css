@@ -124,12 +124,26 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  html,
+  body {
+    transition: background-color 200ms ease-out, color 200ms ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    html,
+    body {
+      transition: none;
+    }
+  }
   body {
     @apply bg-background text-foreground;
     font-size: calc(1rem * var(--ui-scale, 1));
-  }
-  html {
-    @apply font-sans;
   }
   /* MathJax containers should not force inline-block at the question level */
   mjx-container[jax="CHTML"][display="true"] {
