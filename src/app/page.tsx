@@ -110,6 +110,42 @@ export default function HomePage() {
         </Tabs>
       </main>
 
+      <footer className="mt-8 border-t px-4 pt-6 pb-24 text-center font-mono text-[11px] leading-relaxed text-muted-foreground sm:pb-8 sm:text-sm">
+        <p className="mx-auto max-w-prose">
+          Thanks for visiting! Make sure to give this a ★ on{" "}
+          <a
+            href="https://github.com/kagiyanagi/rbse-pyqs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-2 hover:underline hover:text-foreground"
+          >
+            GitHub
+          </a>
+          .
+        </p>
+        <p className="mx-auto mt-2 max-w-prose">
+          Copyleft © [whatever-year-this-is]. Developed by{" "}
+          <a
+            href="https://github.com/kagiyanagi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-2 hover:underline hover:text-foreground"
+          >
+            @kagiyanagi
+          </a>
+          , with the help of{" "}
+          <a
+            href="https://claude.com/claude-code"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-2 hover:underline hover:text-foreground"
+          >
+            Claude
+          </a>
+          .
+        </p>
+      </footer>
+
       <TextSizePopover />
       <SolutionModal question={solutionFor} onClose={() => setSolutionFor(null)} />
     </div>
