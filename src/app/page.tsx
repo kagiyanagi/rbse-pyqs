@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { BookmarkIcon, Moon, Search, Sun } from "lucide-react";
+import { Activity, BookmarkIcon, Moon, Search, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FilterBar } from "@/components/browse/filter-bar";
@@ -12,6 +12,7 @@ import { SettingsModal } from "@/components/settings/settings-modal";
 import { SolutionModal } from "@/components/solution/solution-modal";
 import { TextSizePopover } from "@/components/text-size-popover";
 import { AuthButton } from "@/components/auth/auth-button";
+import { ProgressTab } from "@/components/progress/progress-tab";
 import { api, DEFAULT_FILTER, type QuestionFilter } from "@/lib/api";
 import type { QuestionPayload, StatsResponse } from "@/types";
 
@@ -25,6 +26,7 @@ export default function HomePage() {
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [solutionFor, setSolutionFor] = useState<QuestionPayload | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [tab, setTab] = useState("browse");
 
   useEffect(() => {
     api.stats().then(setStats).catch(() => setStats(null));
@@ -71,7 +73,7 @@ export default function HomePage() {
       </header>
 
       <main className="container mx-auto max-w-6xl px-4 py-6">
-        <Tabs defaultValue="browse" className="space-y-6">
+        <Tabs value={tab} onValueChange={setTab} className="space-y-6">
           <TabsList>
             <TabsTrigger value="browse" className="gap-2">
               <Search className="h-4 w-4" />
@@ -80,6 +82,10 @@ export default function HomePage() {
             <TabsTrigger value="bookmarks" className="gap-2">
               <BookmarkIcon className="h-4 w-4" />
               Bookmarks
+            </TabsTrigger>
+            <TabsTrigger value="progress" className="gap-2">
+              <Activity className="h-4 w-4" />
+              Progress
             </TabsTrigger>
           </TabsList>
 
@@ -107,6 +113,10 @@ export default function HomePage() {
 
           <TabsContent value="bookmarks">
             <BookmarksTab onSolution={setSolutionFor} />
+          </TabsContent>
+
+          <TabsContent value="progress">
+            <ProgressTab active={tab === "progress"} />
           </TabsContent>
         </Tabs>
       </main>
