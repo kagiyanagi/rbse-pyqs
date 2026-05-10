@@ -17,6 +17,7 @@ import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useDefaultLanguage, useLanguageOverrides, type LanguageMode } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
 import {
+  balanceMathDelimiters,
   dedupeLines,
   normalizeNewlines,
   splitLanguages,
@@ -77,7 +78,7 @@ export function QuestionCard({
   else if (mode === "english")
     display = (q.question_latex ? splitLatex.english : split.english) || text;
   else display = (q.question_latex ? splitLatex.hindi : split.hindi) || text;
-  display = unwrapStrayTextMacro(display);
+  display = balanceMathDelimiters(unwrapStrayTextMacro(display));
 
   return (
     <div
