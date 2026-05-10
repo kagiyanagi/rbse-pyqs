@@ -16,7 +16,7 @@ import { useAnswered } from "@/hooks/use-answered";
 import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useDefaultLanguage, useLanguageOverrides, type LanguageMode } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
-import { normalizeNewlines, splitLanguages } from "@/lib/text";
+import { dedupeLines, normalizeNewlines, splitLanguages } from "@/lib/text";
 import { useMemo, useState } from "react";
 
 function langSymbol(mode: LanguageMode) {
@@ -63,11 +63,12 @@ export function QuestionCard({
 
   const rawText = q.question_latex || q.question_text || "";
   const text = useMemo(() => normalizeNewlines(rawText), [rawText]);
+  const bothText = useMemo(() => dedupeLines(text), [text]);
   const split = useMemo(() => splitLanguages(q.question_text || ""), [q.question_text]);
   const splitLatex = useMemo(() => splitLanguages(q.question_latex || ""), [q.question_latex]);
 
   let display: string;
-  if (mode === "both") display = text;
+  if (mode === "both") display = bothText;
   else if (mode === "english")
     display = (q.question_latex ? splitLatex.english : split.english) || text;
   else display = (q.question_latex ? splitLatex.hindi : split.hindi) || text;
