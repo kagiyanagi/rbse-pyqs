@@ -7,6 +7,34 @@ export function normalizeNewlines(s: string): string {
   return s.replace(/\\n/g, "\n");
 }
 
+// The source data sometimes wraps an entire question line in `\text{...}` with
+// no surrounding `$...$` math delimiters. MathJax never enters math mode, so
+// the literal `\text{...}` shows up in the rendered output. Unwrap it per line
+// when it's the whole line (the wrapper has no semantic value outside math).
+export function unwrapStrayTextMacro(s: string): string {
+  return s
+    .split(/\r?\n/)
+    .map((line) => {
+      const trimmed = line.trim();
+      const m = trimmed.match(/^\\text\{([\s\S]*)\}$/);
+      if (!m) return line;
+      const inner = m[1];
+      // Make sure braces are balanced inside the unwrapped content. If they
+      // aren't, our greedy match grabbed too much; bail.
+      let depth = 0;
+      for (const ch of inner) {
+        if (ch === "{") depth++;
+        else if (ch === "}") {
+          depth--;
+          if (depth < 0) return line;
+        }
+      }
+      if (depth !== 0) return line;
+      return inner;
+    })
+    .join("\n");
+}
+
 // "neutral" lines have no Devanagari AND no run of 4+ ASCII letters — typically
 // pure math/formula lines like `m_p = 1.0073 amu` or `1 amu = 931 MeV.`. These
 // belong to both language versions, not just whichever bucket happens to use
