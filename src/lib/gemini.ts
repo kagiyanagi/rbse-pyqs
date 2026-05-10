@@ -41,7 +41,7 @@ export function formatGeminiError(err: unknown): FriendlyError {
       const wait = err.retryAfterSec ? `${err.retryAfterSec}s` : "a bit";
       return {
         title: "Rate limit reached",
-        hint: `Gemini's free tier is throttled. Wait ${wait} and try again, or paste a different API key in Settings.`,
+        hint: `All your Gemini keys are throttled. Wait ${wait} and try again, or add another key in Settings.`,
         raw,
         status: err.status,
         retryAfterSec: err.retryAfterSec,
@@ -89,6 +89,100 @@ export function formatGeminiError(err: unknown): FriendlyError {
   return { title: "Generation failed", hint: msg, raw: msg };
 }
 
+class KeyRotator {
+  private cooldowns = new Map<string, number>();
+
+  isCoolingDown(key: string): boolean {
+    const t = this.cooldowns.get(key);
+    if (t == null) return false;
+    if (Date.now() >= t) {
+      this.cooldowns.delete(key);
+      return false;
+    }
+    return true;
+  }
+
+  cooldownRemaining(key: string): number {
+    const t = this.cooldowns.get(key);
+    if (t == null) return 0;
+    return Math.max(0, Math.ceil((t - Date.now()) / 1000));
+  }
+
+  markCooldown(key: string, sec: number) {
+    this.cooldowns.set(key, Date.now() + Math.max(1, sec) * 1000);
+  }
+}
+
+export const geminiKeyRotator = new KeyRotator();
+
+export type KeyAdvanceInfo = {
+  fromIndex: number;
+  toIndex: number;
+  reason: GeminiApiError;
+};
+
+export type GeminiStreamMultiOpts = Omit<GeminiStreamOpts, "apiKey"> & {
+  apiKeys: string[];
+  onKeyAdvance?: (info: KeyAdvanceInfo) => void;
+};
+
+// Tries each key in order (live keys first, then those nearest to coming off
+// cooldown). If a key returns 429/401/403 BEFORE any chunk has been yielded,
+// switch to the next key. Mid-stream errors are not retried — that would
+// duplicate already-emitted text.
+export async function* streamGeminiWithRotation(
+  opts: GeminiStreamMultiOpts,
+): AsyncGenerator<string, void, void> {
+  const cleaned = opts.apiKeys.map((k) => k.trim()).filter(Boolean);
+  if (cleaned.length === 0) {
+    throw new Error("Add your Gemini API key in Settings first.");
+  }
+
+  const order = cleaned
+    .map((k, i) => ({ key: k, index: i, cooldown: geminiKeyRotator.cooldownRemaining(k) }))
+    .sort((a, b) => a.cooldown - b.cooldown);
+
+  let yielded = false;
+  let lastError: unknown = null;
+
+  for (let attempt = 0; attempt < order.length; attempt++) {
+    const { key, index } = order[attempt];
+    if (opts.signal?.aborted) throw new DOMException("Aborted", "AbortError");
+    try {
+      for await (const chunk of streamGemini({
+        apiKey: key,
+        prompt: opts.prompt,
+        signal: opts.signal,
+        model: opts.model,
+      })) {
+        yielded = true;
+        yield chunk;
+      }
+      return;
+    } catch (e) {
+      lastError = e;
+      if (yielded) throw e;
+      if (opts.signal?.aborted) throw e;
+      if (e instanceof GeminiApiError) {
+        if (e.status === 429) {
+          geminiKeyRotator.markCooldown(key, e.retryAfterSec ?? 60);
+        }
+        const rotatable = e.status === 429 || e.status === 401 || e.status === 403;
+        if (rotatable && attempt + 1 < order.length) {
+          opts.onKeyAdvance?.({
+            fromIndex: index,
+            toIndex: order[attempt + 1].index,
+            reason: e,
+          });
+          continue;
+        }
+      }
+      throw e;
+    }
+  }
+  throw lastError ?? new Error("All API keys exhausted.");
+}
+
 export async function* streamGemini(opts: GeminiStreamOpts): AsyncGenerator<string, void, void> {
   const model = opts.model ?? "gemini-2.5-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${encodeURIComponent(opts.apiKey)}`;
@@ -134,12 +228,17 @@ export async function* streamGemini(opts: GeminiStreamOpts): AsyncGenerator<stri
 
 export function marksGuidance(marks: number | null | undefined): string {
   const m = marks ?? 0;
-  if (m <= 1) return "Give a concise 1–2 line answer.";
-  if (m <= 2) return "Give a 2–3 line answer with the key step.";
-  if (m <= 3) return "Give a 4–6 line answer with the formula and brief reasoning.";
-  if (m <= 4) return "Give a 6–10 line answer with the formula and worked steps.";
-  if (m <= 5) return "Give a thorough 10–15 line answer with full derivation.";
-  return "Give a complete derivation with every step, 15–25 lines.";
+  if (m <= 1)
+    return "1 mark — write ONE concise sentence (max 2 short lines). State the fact or definition directly. NO headings, NO 'Given/Step/Final Answer' sections — just the clean answer.";
+  if (m <= 2)
+    return "2 marks — 2–3 short lines containing the key formula or the single main step. NO multi-section headings; keep it a tight, compact answer.";
+  if (m <= 3)
+    return "3 marks — 4–6 lines. For numeric questions: Formula → Substitution → Result (one short line each). For theory: 3–4 sentences with the key reasoning. Light structure only.";
+  if (m <= 4)
+    return "4 marks — 6–10 lines with formula, worked steps, and final answer. Short `###` headings (Given / Formula / Steps / Answer) are okay if they clarify; skip them if not.";
+  if (m <= 5)
+    return "5 marks — 10–15 lines, full derivation: Given → Formula → Steps → Final Answer. Use short `###` headings for each section.";
+  return "6+ marks — complete derivation with every step (15–25 lines). Use `###` headings for Given, Formula, Step 1, Step 2, …, Final Answer.";
 }
 
 export function fillTemplate(

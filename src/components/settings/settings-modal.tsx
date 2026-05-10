@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Settings as SettingsIcon } from "lucide-react";
+import { Plus, Settings as SettingsIcon, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,7 +25,7 @@ import {
 import {
   DEFAULT_PROMPT_TEMPLATE,
   GEMINI_MODELS,
-  useGeminiKey,
+  useGeminiKeys,
   useGeminiModel,
   useHideAnswered,
   usePromptTemplate,
@@ -39,7 +39,7 @@ export function SettingsModal() {
   const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useDefaultLanguage();
   const [hideAnswered, setHideAnswered] = useHideAnswered();
-  const [apiKey, setApiKey] = useGeminiKey();
+  const [apiKeys, setApiKeys] = useGeminiKeys();
   const [model, setModel] = useGeminiModel();
   const [template, setTemplate] = usePromptTemplate();
   const { count: solutionCount, clear: clearSolutions } = useSolutionCache();
@@ -51,6 +51,7 @@ export function SettingsModal() {
       "theme",
       "defaultLanguage",
       "geminiKey",
+      "geminiKeys",
       "geminiModel",
       "promptTemplate",
       "hideAnswered",
@@ -120,16 +121,51 @@ export function SettingsModal() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Gemini API key</Label>
-            <Input
-              type="password"
-              placeholder="AIzaSy…"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              autoComplete="off"
-            />
+            <div className="flex items-center justify-between">
+              <Label>Gemini API keys</Label>
+              {apiKeys.length > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  {apiKeys.length} key{apiKeys.length === 1 ? "" : "s"}
+                </span>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              {apiKeys.map((key, idx) => (
+                <div key={idx} className="flex items-center gap-1.5">
+                  <Input
+                    type="password"
+                    placeholder="AIzaSy…"
+                    value={key}
+                    onChange={(e) => {
+                      const next = [...apiKeys];
+                      next[idx] = e.target.value;
+                      setApiKeys(next);
+                    }}
+                    autoComplete="off"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Remove key ${idx + 1}`}
+                    onClick={() => setApiKeys(apiKeys.filter((_, i) => i !== idx))}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-1.5"
+                onClick={() => setApiKeys([...apiKeys, ""])}
+              >
+                <Plus className="h-3.5 w-3.5" />
+                {apiKeys.length === 0 ? "Add API key" : "Add another key"}
+              </Button>
+            </div>
             <p className="text-xs text-muted-foreground">
-              Get a free key at{" "}
+              Add multiple keys to keep generating when one hits its rate limit — the next key
+              takes over automatically. Get free keys at{" "}
               <a
                 href="https://aistudio.google.com/apikey"
                 target="_blank"

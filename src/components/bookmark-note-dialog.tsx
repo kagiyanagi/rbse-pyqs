@@ -19,8 +19,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useDefaultLanguage, useLanguageOverrides } from "@/hooks/use-language";
-import { useGeminiKey, useGeminiModel } from "@/hooks/use-settings";
-import { streamGemini } from "@/lib/gemini";
+import { useGeminiKeys, useGeminiModel } from "@/hooks/use-settings";
+import { streamGeminiWithRotation } from "@/lib/gemini";
+import { PreWithSvg } from "@/lib/markdown-svg";
 import { AiErrorBanner } from "@/components/ai-error-banner";
 import { extractByMode, languageDirective } from "@/lib/text";
 import type { QuestionPayload } from "@/types";
@@ -35,7 +36,8 @@ export function BookmarkNoteDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { get, save, remove } = useBookmarkNotes();
-  const [apiKey] = useGeminiKey();
+  const [apiKeys] = useGeminiKeys();
+  const hasKey = apiKeys.some((k) => k.trim());
   const [model] = useGeminiModel();
   const [defaultLang] = useDefaultLanguage();
   const { get: getLangMode } = useLanguageOverrides();
@@ -70,7 +72,7 @@ export function BookmarkNoteDialog({
   };
 
   const generate = async () => {
-    if (!apiKey) {
+    if (!hasKey) {
       setGenError(new Error("Add your Gemini API key in Settings first."));
       return;
     }
@@ -85,7 +87,12 @@ export function BookmarkNoteDialog({
     const prompt = buildNotePrompt(question, mode);
     let acc = "";
     try {
-      for await (const chunk of streamGemini({ apiKey, prompt, model, signal: ac.signal })) {
+      for await (const chunk of streamGeminiWithRotation({
+        apiKeys,
+        prompt,
+        model,
+        signal: ac.signal,
+      })) {
         acc += chunk;
         setDraft(acc);
       }
@@ -134,7 +141,7 @@ export function BookmarkNoteDialog({
               variant="outline"
               size="sm"
               onClick={generate}
-              disabled={!apiKey}
+              disabled={!hasKey}
               title={
                 draft
                   ? "Replace the current note with an AI-generated one"
@@ -175,6 +182,7 @@ export function BookmarkNoteDialog({
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm, remarkMath]}
                   rehypePlugins={[[rehypeKatex, { strict: false, throwOnError: false }]]}
+                  components={{ pre: PreWithSvg }}
                 >
                   {draft}
                 </ReactMarkdown>
