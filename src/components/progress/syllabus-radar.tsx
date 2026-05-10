@@ -48,6 +48,7 @@ export function SyllabusRadar({ subjects, size = 320 }: Props) {
       viewBox={`0 0 ${size} ${size}`}
       width={size}
       height={size}
+      style={{ maxWidth: "100%", height: "auto", overflow: "visible" }}
       className="select-none"
       role="img"
       aria-label="Syllabus coverage radar"

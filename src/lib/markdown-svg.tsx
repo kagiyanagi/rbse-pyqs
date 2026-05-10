@@ -3,8 +3,13 @@ import { isValidElement, type ReactNode } from "react";
 const MAX_SVG_BYTES = 60_000;
 
 export function sanitizeSvg(input: string): string | null {
-  const trimmed = input.trim();
-  if (!/^<svg[\s>]/i.test(trimmed)) return null;
+  // Extract only the first <svg>…</svg>. The model occasionally fails to close
+  // the ```svg fence and dumps trailing markdown into the code block; without
+  // this extraction those characters render as text nodes next to the SVG and
+  // break the layout (flex wrapper turns them into a narrow side column).
+  const match = input.match(/<svg[\s>][\s\S]*?<\/svg\s*>/i);
+  if (!match) return null;
+  const trimmed = match[0];
   if (trimmed.length > MAX_SVG_BYTES) return null;
   const out = trimmed
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
@@ -15,7 +20,6 @@ export function sanitizeSvg(input: string): string | null {
     .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
     .replace(/\son\w+\s*=\s*[^\s>]+/gi, "")
     .replace(/\s(href|xlink:href)\s*=\s*("javascript:[^"]*"|'javascript:[^']*'|javascript:[^\s>]+)/gi, "");
-  // Re-check size after substitutions.
   if (out.length > MAX_SVG_BYTES) return null;
   return out;
 }
@@ -42,7 +46,7 @@ export function PreWithSvg({ children, ...rest }: { children?: ReactNode }) {
       if (cleaned) {
         return (
           <div
-            className="solution-svg my-3 flex justify-center"
+            className="solution-svg my-3 flex flex-col items-center"
             dangerouslySetInnerHTML={{ __html: cleaned }}
           />
         );
