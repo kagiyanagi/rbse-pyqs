@@ -141,7 +141,7 @@ export function SolutionModal({
         }
       }}
     >
-      <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col gap-3 overflow-hidden">
+      <DialogContent className="flex max-h-[85dvh] w-[calc(100%-2rem)] max-w-3xl flex-col gap-3 overflow-hidden sm:w-auto">
         <DialogHeader>
           <DialogTitle className="flex flex-wrap items-center gap-2">
             <span>Solution{question?.marks != null ? ` · ${question.marks} marks` : ""}</span>
