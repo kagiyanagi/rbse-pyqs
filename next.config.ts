@@ -4,9 +4,24 @@ import type { NextConfig } from "next";
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
+const firebaseAuthDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
+  },
+  async rewrites() {
+    if (!firebaseAuthDomain) return [];
+    return [
+      {
+        source: "/__/auth/:path*",
+        destination: `https://${firebaseAuthDomain}/__/auth/:path*`,
+      },
+      {
+        source: "/__/firebase/:path*",
+        destination: `https://${firebaseAuthDomain}/__/firebase/:path*`,
+      },
+    ];
   },
   async headers() {
     return [
