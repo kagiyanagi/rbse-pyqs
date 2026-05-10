@@ -14,13 +14,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { BookmarkPicker } from "@/components/bookmark-picker";
-import { fillTemplate, marksGuidance, streamGemini } from "@/lib/gemini";
+import { fillTemplate, marksGuidance, streamGeminiWithRotation } from "@/lib/gemini";
+import { PreWithSvg } from "@/lib/markdown-svg";
 import { AiErrorBanner } from "@/components/ai-error-banner";
 import { extractByMode, languageDirective } from "@/lib/text";
 import { useDefaultLanguage, useLanguageOverrides } from "@/hooks/use-language";
 import {
   GEMINI_MODELS,
-  useGeminiKey,
+  useGeminiKeys,
   useGeminiModel,
   usePromptTemplate,
   type GeminiModelId,
@@ -42,7 +43,8 @@ export function SolutionModal({
   question: QuestionPayload | null;
   onClose: () => void;
 }) {
-  const [apiKey] = useGeminiKey();
+  const [apiKeys] = useGeminiKeys();
+  const hasKey = apiKeys.some((k) => k.trim());
   const [model, setModel] = useGeminiModel();
   const [template] = usePromptTemplate();
   const [defaultLang] = useDefaultLanguage();
@@ -69,7 +71,7 @@ export function SolutionModal({
         return;
       }
     }
-    if (!apiKey) {
+    if (!hasKey) {
       setError(new Error("Add your Gemini API key in Settings first."));
       setText("");
       setFromCache(false);
@@ -95,7 +97,12 @@ export function SolutionModal({
     });
     let acc = "";
     try {
-      for await (const chunk of streamGemini({ apiKey, prompt, model, signal: ac.signal })) {
+      for await (const chunk of streamGeminiWithRotation({
+        apiKeys,
+        prompt,
+        model,
+        signal: ac.signal,
+      })) {
         acc += chunk;
         setText(acc);
       }
@@ -150,7 +157,7 @@ export function SolutionModal({
 
         {error != null && <AiErrorBanner error={error} />}
 
-        {!apiKey && !error && !text && (
+        {!hasKey && !error && !text && (
           <div className="rounded-md border bg-muted/40 p-3 text-sm">
             Set your Gemini API key in Settings to generate solutions.
           </div>
@@ -161,6 +168,7 @@ export function SolutionModal({
             <ReactMarkdown
               remarkPlugins={[remarkGfm, remarkMath]}
               rehypePlugins={[[rehypeKatex, { strict: false, throwOnError: false }]]}
+              components={{ pre: PreWithSvg }}
             >
               {text}
             </ReactMarkdown>
@@ -178,7 +186,7 @@ export function SolutionModal({
               variant="outline"
               size="sm"
               onClick={() => setRegenTick((t) => t + 1)}
-              disabled={loading || !apiKey}
+              disabled={loading || !hasKey}
               title={fromCache ? "Replace the saved solution with a fresh one" : "Generate again"}
             >
               <RefreshCw className={`mr-1.5 h-4 w-4 ${loading ? "animate-spin" : ""}`} />

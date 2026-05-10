@@ -252,6 +252,19 @@
   line-height: 1.5;
 }
 .solution-prose pre code { background: transparent; padding: 0; }
+.solution-prose .solution-svg {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.5em;
+  padding: 0.6em;
+  color: var(--foreground);
+}
+.solution-prose .solution-svg svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
 .solution-prose blockquote {
   border-left: 3px solid var(--border);
   padding-left: 0.85em;

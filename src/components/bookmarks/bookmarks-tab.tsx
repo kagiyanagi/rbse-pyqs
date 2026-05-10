@@ -27,6 +27,7 @@ import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useSolutionCache } from "@/hooks/use-solutions";
 import { useCardKeyboardNav } from "@/hooks/use-card-keyboard-nav";
 import { QuestionCard } from "@/components/browse/question-card";
+import { MultiSelect } from "@/components/multi-select";
 import { api } from "@/lib/api";
 import type { QuestionPayload } from "@/types";
 
@@ -71,6 +72,8 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
   const [confirm, setConfirm] = useState<Confirm | null>(null);
   const [sort, setSort] = useState<SortMode>("lastAdded");
   const [shuffleTick, setShuffleTick] = useState(0);
+  const [filterSubjects, setFilterSubjects] = useState<string[]>([]);
+  const [filterChapters, setFilterChapters] = useState<string[]>([]);
 
   const allIds: number[] = useMemo(() => {
     if (active === ANSWERED) return answeredIds;
@@ -148,8 +151,48 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
     return result;
   }, [questions, allIds, sort, shuffleTick]);
 
-  const orderedIds = useMemo(() => orderedQuestions.map((q) => q.id), [orderedQuestions]);
-  const { focusedId } = useCardKeyboardNav(orderedIds);
+  const availableSubjects = useMemo(() => {
+    const set = new Set<string>();
+    for (const q of questions) if (q.subject) set.add(q.subject);
+    return [...set].sort();
+  }, [questions]);
+
+  const effectiveSubjects = useMemo(() => {
+    if (filterSubjects.length === 0) return filterSubjects;
+    const valid = new Set(availableSubjects);
+    return filterSubjects.filter((s) => valid.has(s));
+  }, [filterSubjects, availableSubjects]);
+
+  const availableChapters = useMemo(() => {
+    const set = new Set<string>();
+    const subjFilter = effectiveSubjects.length > 0 ? new Set(effectiveSubjects) : null;
+    for (const q of questions) {
+      if (!q.chapter) continue;
+      if (subjFilter && (!q.subject || !subjFilter.has(q.subject))) continue;
+      set.add(q.chapter);
+    }
+    return [...set].sort();
+  }, [questions, effectiveSubjects]);
+
+  const effectiveChapters = useMemo(() => {
+    if (filterChapters.length === 0) return filterChapters;
+    const valid = new Set(availableChapters);
+    return filterChapters.filter((c) => valid.has(c));
+  }, [filterChapters, availableChapters]);
+
+  const visibleQuestions = useMemo(() => {
+    if (effectiveSubjects.length === 0 && effectiveChapters.length === 0) return orderedQuestions;
+    const subjSet = effectiveSubjects.length > 0 ? new Set(effectiveSubjects) : null;
+    const chapSet = effectiveChapters.length > 0 ? new Set(effectiveChapters) : null;
+    return orderedQuestions.filter((q) => {
+      if (subjSet && (!q.subject || !subjSet.has(q.subject))) return false;
+      if (chapSet && (!q.chapter || !chapSet.has(q.chapter))) return false;
+      return true;
+    });
+  }, [orderedQuestions, effectiveSubjects, effectiveChapters]);
+
+  const visibleIds = useMemo(() => visibleQuestions.map((q) => q.id), [visibleQuestions]);
+  const { focusedId } = useCardKeyboardNav(visibleIds);
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_1fr]">
@@ -250,8 +293,10 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
       <div>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{active}</span> · {questions.length} question
-            {questions.length === 1 ? "" : "s"}
+            <span className="font-medium text-foreground">{active}</span> ·{" "}
+            {visibleQuestions.length}
+            {visibleQuestions.length !== questions.length ? ` of ${questions.length}` : ""} question
+            {visibleQuestions.length === 1 ? "" : "s"}
           </div>
           <div className="flex items-center gap-2">
             <Select
@@ -298,6 +343,41 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
             </Button>
           </div>
         </div>
+        {questions.length > 0 && (availableSubjects.length > 0 || availableChapters.length > 0) && (
+          <div className="mb-3 flex flex-wrap items-end gap-2">
+            {availableSubjects.length > 0 && (
+              <MultiSelect
+                label="Subject"
+                options={availableSubjects}
+                value={effectiveSubjects}
+                onChange={setFilterSubjects}
+                className="min-w-[160px] flex-1 sm:flex-none sm:w-[200px]"
+              />
+            )}
+            {availableChapters.length > 0 && (
+              <MultiSelect
+                label="Chapter"
+                options={availableChapters}
+                value={effectiveChapters}
+                onChange={setFilterChapters}
+                className="min-w-[160px] flex-1 sm:flex-none sm:w-[240px]"
+              />
+            )}
+            {(effectiveSubjects.length > 0 || effectiveChapters.length > 0) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs"
+                onClick={() => {
+                  setFilterSubjects([]);
+                  setFilterChapters([]);
+                }}
+              >
+                Reset
+              </Button>
+            )}
+          </div>
+        )}
         {loading ? (
           <div className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
             Loading…
@@ -312,9 +392,13 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
                   ? "No solutions yet. Generate one for any question and it'll show up here."
                   : "Nothing here yet. Bookmark questions from the Browse tab."}
           </div>
+        ) : visibleQuestions.length === 0 ? (
+          <div className="rounded-lg border border-dashed bg-muted/30 p-8 text-center text-muted-foreground">
+            No questions match the current subject/chapter filter.
+          </div>
         ) : (
           <div className="grid min-w-0 gap-4">
-            {orderedQuestions.map((q) => (
+            {visibleQuestions.map((q) => (
               <QuestionCard
                 key={q.id}
                 q={q}
