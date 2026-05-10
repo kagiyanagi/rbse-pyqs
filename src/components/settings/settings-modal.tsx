@@ -134,12 +134,32 @@ export function SettingsModal() {
                 <div key={idx} className="flex items-center gap-1.5">
                   <Input
                     type="password"
-                    placeholder="AIzaSy…"
+                    placeholder="AIzaSy…  (paste a list to split into rows)"
                     value={key}
                     onChange={(e) => {
                       const next = [...apiKeys];
                       next[idx] = e.target.value;
                       setApiKeys(next);
+                    }}
+                    onPaste={(e) => {
+                      const text = e.clipboardData.getData("text");
+                      const parts = text
+                        .split(/[\s,;]+/)
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                      if (parts.length <= 1) return;
+                      e.preventDefault();
+                      const next = [...apiKeys];
+                      next.splice(idx, 1, ...parts);
+                      const seen = new Set<string>();
+                      setApiKeys(
+                        next.filter((k) => {
+                          if (!k) return true;
+                          if (seen.has(k)) return false;
+                          seen.add(k);
+                          return true;
+                        }),
+                      );
                     }}
                     autoComplete="off"
                   />
@@ -165,7 +185,9 @@ export function SettingsModal() {
             </div>
             <p className="text-xs text-muted-foreground">
               Add multiple keys to keep generating when one hits its rate limit — the next key
-              takes over automatically. Get free keys at{" "}
+              takes over automatically. Tip: paste a list of keys (one per line, or
+              comma-separated) into any row to split them into separate rows automatically. Get
+              free keys at{" "}
               <a
                 href="https://aistudio.google.com/apikey"
                 target="_blank"
