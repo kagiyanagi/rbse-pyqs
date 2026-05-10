@@ -7,6 +7,27 @@ export function normalizeNewlines(s: string): string {
   return s.replace(/\\n/g, "\n");
 }
 
+// The source data occasionally drops the closing `$` of an inline-math span, so
+// MathJax never finds a delimiter pair and prints the raw `$\text{...}^{-2}`
+// LaTeX literally. If a line has an odd number of unescaped `$` (after pairing
+// off `$$…$$` blocks) and contains math-like markup, append a closing `$`.
+const MATH_LIKE = /(\\(?:text|frac|sqrt|sum|int|alpha|beta|gamma|delta|theta|lambda|mu|pi|sigma|omega|times|cdot|leq|geq|infty|partial|nabla|vec|hat|bar|to|rightarrow|leftarrow)\b|[_^]\{)/;
+
+function balanceLineDollars(line: string): string {
+  // Pair off $$…$$ blocks first (they are independent of single-$ math).
+  const withoutBlocks = line.replace(/\$\$[\s\S]*?\$\$/g, "");
+  // Drop escaped \$ so they don't count.
+  const stripped = withoutBlocks.replace(/\\\$/g, "");
+  const dollars = (stripped.match(/\$/g) ?? []).length;
+  if (dollars % 2 === 0) return line;
+  if (!MATH_LIKE.test(line)) return line;
+  return line + "$";
+}
+
+export function balanceMathDelimiters(s: string): string {
+  return s.split(/\r?\n/).map(balanceLineDollars).join("\n");
+}
+
 // The source data sometimes wraps an entire question line in `\text{...}` with
 // no surrounding `$...$` math delimiters. MathJax never enters math mode, so
 // the literal `\text{...}` shows up in the rendered output. Unwrap it per line
