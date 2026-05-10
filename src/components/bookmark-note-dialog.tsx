@@ -110,7 +110,7 @@ export function BookmarkNoteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[85vh] max-w-2xl flex-col gap-3 overflow-hidden">
+      <DialogContent className="flex max-h-[85dvh] w-[calc(100%-2rem)] max-w-2xl flex-col gap-3 overflow-hidden sm:w-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <NotebookPen className="h-4 w-4" />

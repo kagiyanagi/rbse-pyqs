@@ -264,6 +264,11 @@
   height: auto;
   display: block;
   overflow: visible;
+  color: var(--foreground);
+}
+.solution-prose .solution-svg svg text,
+.solution-prose .solution-svg svg tspan {
+  fill: currentColor;
 }
 .solution-prose blockquote {
   border-left: 3px solid var(--border);
