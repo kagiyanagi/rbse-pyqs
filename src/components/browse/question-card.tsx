@@ -144,7 +144,21 @@ export function QuestionCard({
       </div>
 
       {q.source_file && (
-        <div className="mt-2 text-[11px] text-muted-foreground">📄 {q.source_file}</div>
+        <div className="mt-2 text-[11px] text-muted-foreground">
+          {process.env.NEXT_PUBLIC_PAPERS_BASE_URL ? (
+            <a
+              href={`${process.env.NEXT_PUBLIC_PAPERS_BASE_URL}/${q.source_file}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-2 hover:text-foreground hover:underline"
+              title="Open the original PDF in a new tab"
+            >
+              📄 {q.source_file}
+            </a>
+          ) : (
+            <>📄 {q.source_file}</>
+          )}
+        </div>
       )}
 
       {note && (
