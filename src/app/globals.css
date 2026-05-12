@@ -156,6 +156,7 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+    font-size: calc(100% * var(--ui-scale, 1));
   }
   html,
   body {
@@ -172,7 +173,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-size: calc(1rem * var(--ui-scale, 1));
   }
   /* MathJax containers should not force inline-block at the question level */
   mjx-container[jax="CHTML"][display="true"] {
@@ -197,7 +197,7 @@
 
 /* AI solution typography — clean, structured rendering of streamed markdown */
 .solution-prose {
-  font-size: calc(0.95rem * var(--ui-scale, 1));
+  font-size: 0.95rem;
   line-height: 1.65;
   color: var(--foreground);
   word-wrap: break-word;
