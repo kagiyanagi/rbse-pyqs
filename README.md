@@ -1,4 +1,4 @@
-# RBSE Q-Bank — Next.js / Turso
+# RBSE Q-Bank - Next.js / Turso
 
 Next.js 16 (App Router) port of the original Flask app. Reads questions from a Turso (libSQL) database via Drizzle ORM. Designed to deploy on Vercel free tier.
 
@@ -9,7 +9,7 @@ Next.js 16 (App Router) port of the original Flask app. Reads questions from a T
 - Drizzle ORM + `@libsql/client`
 - next-themes (light/dark)
 - better-react-mathjax (MathJax 3 LaTeX rendering)
-- Gemini 2.5 Flash for AI solutions — **client-side only**, user's key is read from `localStorage`. The server never sees a Gemini key.
+- Gemini 2.5 Flash for AI solutions - **client-side only**, user's key is read from `localStorage`. The server never sees a Gemini key.
 
 ## Setup
 
@@ -20,12 +20,12 @@ pnpm dev
 ```
 
 Required env vars:
-- `TURSO_DATABASE_URL` — `libsql://<db>-<org>.<region>.turso.io`
-- `TURSO_AUTH_TOKEN` — `turso db tokens create <db>` output
-- `NEXT_PUBLIC_GA_ID` — optional GA4 measurement ID
+- `TURSO_DATABASE_URL` - `libsql://<db>-<org>.<region>.turso.io`
+- `TURSO_AUTH_TOKEN` - `turso db tokens create <db>` output
+- `NEXT_PUBLIC_GA_ID` - optional GA4 measurement ID
 
 Optional (for accounts + cross-device sync):
-- `NEXT_PUBLIC_FIREBASE_*` — see [Firebase setup](#firebase-setup) below. The app
+- `NEXT_PUBLIC_FIREBASE_*` - see [Firebase setup](#firebase-setup) below. The app
   works fully without these; sign-in just won't be available.
 
 ## One-time data migration
@@ -40,7 +40,7 @@ pnpm exec drizzle-kit push
 pnpm exec tsx scripts/migrate-from-sqlite.ts
 ```
 
-Re-run the migration anytime the upstream Python pipeline rebuilds `questions.db` — it truncates and re-inserts.
+Re-run the migration anytime the upstream Python pipeline rebuilds `questions.db` - it truncates and re-inserts.
 
 ## Firebase setup
 
@@ -63,7 +63,7 @@ When you do enable Firebase:
 - Add your production domain when you deploy.
 
 **4. Firestore Database → Create database**
-- Pick **Production mode** (not Test mode) — we ship proper rules.
+- Pick **Production mode** (not Test mode) - we ship proper rules.
 - Choose a location close to your users (e.g. `asia-south1` for India).
 - Paste [`firestore.rules`](./firestore.rules) into **Firestore → Rules** and Publish.
 
@@ -81,7 +81,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
-The Firebase web `apiKey` is **public by design** — it just identifies the
+The Firebase web `apiKey` is **public by design** - it just identifies the
 project. Real security comes from the Firestore rules and the Authorized
 domains list.
 
@@ -113,7 +113,7 @@ vercel env add NEXT_PUBLIC_GA_ID
 vercel --prod
 ```
 
-Vercel auto-detects Next.js — no `vercel.json` needed.
+Vercel auto-detects Next.js - no `vercel.json` needed.
 
 ## What's where
 
@@ -169,6 +169,6 @@ src/
 | Floating text-size popover (question + UI scales) | ✅ |
 | Customizable AI prompt template | ✅ |
 | GA4 (via `NEXT_PUBLIC_GA_ID`) | ✅ |
-| Multi-DB switcher (`?db=`) | ❌ dropped — single Turso DB |
+| Multi-DB switcher (`?db=`) | ❌ dropped - single Turso DB |
 
-LocalStorage keys are unchanged from the Flask app (`rbse_bookmarks`, `theme`, `geminiKey`, etc.) — switching domains will not preserve them, but staying on the same domain will.
+LocalStorage keys are unchanged from the Flask app (`rbse_bookmarks`, `theme`, `geminiKey`, etc.) - switching domains will not preserve them, but staying on the same domain will.

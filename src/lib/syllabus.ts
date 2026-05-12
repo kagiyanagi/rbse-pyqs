@@ -154,7 +154,7 @@ export function canonicalizeChapter(
     }
   }
 
-  // Multi-chapter strings like "A / B" or "A, B" — return the first canonical match.
+  // Multi-chapter strings like "A / B" or "A, B" - return the first canonical match.
   if (/[,/]/.test(trimmed)) {
     const parts = trimmed.split(/\s*[,/]\s*/).map((p) => p.trim()).filter(Boolean);
     for (const p of parts) {

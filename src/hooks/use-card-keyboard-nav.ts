@@ -60,7 +60,7 @@ export function useCardKeyboardNav(questionIds: readonly number[], enabled = tru
         return;
       }
       if (key === "g") {
-        // gg → top — but we accept bare g for "go to top" since most users hit it once.
+        // gg → top - but we accept bare g for "go to top" since most users hit it once.
         e.preventDefault();
         setFocusedIdx(0);
         return;

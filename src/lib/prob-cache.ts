@@ -6,7 +6,7 @@ import { type ChapterStats, type ProbCache, chapterKey } from "@/types";
 let cachePromise: Promise<ProbCache> | null = null;
 
 async function build(): Promise<ProbCache> {
-  // Distinct years (overall) — used as fallback total
+  // Distinct years (overall) - used as fallback total
   const yearRows = await db
     .selectDistinct({ year: questions.year })
     .from(questions)

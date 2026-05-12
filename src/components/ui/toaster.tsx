@@ -119,7 +119,7 @@ export function ToasterProvider({ children }: { children: React.ReactNode }) {
 export function useToast(): Ctx {
   const ctx = useContext(ToastCtx);
   if (!ctx) {
-    // Safe no-op when used outside provider — avoids crashes during early renders.
+    // Safe no-op when used outside provider - avoids crashes during early renders.
     return {
       toast: () => 0,
       success: () => 0,

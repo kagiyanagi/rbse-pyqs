@@ -144,15 +144,6 @@ export default function HomePage() {
           >
             @kagiyanagi
           </a>
-          , with the help of{" "}
-          <a
-            href="https://claude.com/claude-code"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline-offset-2 hover:underline hover:text-foreground"
-          >
-            Claude
-          </a>
           .
         </p>
       </footer>

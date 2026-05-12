@@ -184,7 +184,7 @@ export function SettingsModal() {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Add multiple keys to keep generating when one hits its rate limit — the next key
+              Add multiple keys to keep generating when one hits its rate limit - the next key
               takes over automatically. Tip: paste a list of keys (one per line, or
               comma-separated) into any row to split them into separate rows automatically. Get
               free keys at{" "}

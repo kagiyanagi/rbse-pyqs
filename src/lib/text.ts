@@ -56,7 +56,7 @@ export function unwrapStrayTextMacro(s: string): string {
     .join("\n");
 }
 
-// "neutral" lines have no Devanagari AND no run of 4+ ASCII letters — typically
+// "neutral" lines have no Devanagari AND no run of 4+ ASCII letters - typically
 // pure math/formula lines like `m_p = 1.0073 amu` or `1 amu = 931 MeV.`. These
 // belong to both language versions, not just whichever bucket happens to use
 // the same script.

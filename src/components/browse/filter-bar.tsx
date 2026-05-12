@@ -116,7 +116,7 @@ export function FilterBar({
           <Label className="text-xs">
             Year:{" "}
             <span className="tabular-nums">{filter.min_year ?? YEAR_MIN}</span>
-            {" – "}
+            {" - "}
             <span className="tabular-nums">{filter.max_year ?? YEAR_MAX}</span>
           </Label>
           <Slider

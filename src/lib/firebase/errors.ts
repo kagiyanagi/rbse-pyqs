@@ -7,7 +7,7 @@ const MESSAGES: Record<string, string> = {
   "auth/wrong-password": "Wrong email or password.",
   "auth/user-not-found": "No account with that email.",
   "auth/too-many-requests": "Too many attempts. Try again in a few minutes.",
-  "auth/network-request-failed": "Network problem — check your connection.",
+  "auth/network-request-failed": "Network problem - check your connection.",
   "auth/popup-closed-by-user": "Sign-in window closed before completion.",
   "auth/popup-blocked": "Your browser blocked the sign-in popup. Allow popups and try again.",
   "auth/cancelled-popup-request": "Sign-in cancelled.",

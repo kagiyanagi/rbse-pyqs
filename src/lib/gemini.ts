@@ -58,7 +58,7 @@ export function formatGeminiError(err: unknown): FriendlyError {
     if (err.status === 400) {
       return {
         title: "Bad request",
-        hint: "Gemini rejected the prompt. The question text might be malformed — try a different question or model.",
+        hint: "Gemini rejected the prompt. The question text might be malformed - try a different question or model.",
         raw,
         status: err.status,
       };
@@ -128,7 +128,7 @@ export type GeminiStreamMultiOpts = Omit<GeminiStreamOpts, "apiKey"> & {
 
 // Tries each key in order (live keys first, then those nearest to coming off
 // cooldown). If a key returns 429/401/403 BEFORE any chunk has been yielded,
-// switch to the next key. Mid-stream errors are not retried — that would
+// switch to the next key. Mid-stream errors are not retried - that would
 // duplicate already-emitted text.
 export async function* streamGeminiWithRotation(
   opts: GeminiStreamMultiOpts,
@@ -229,16 +229,16 @@ export async function* streamGemini(opts: GeminiStreamOpts): AsyncGenerator<stri
 export function marksGuidance(marks: number | null | undefined): string {
   const m = marks ?? 0;
   if (m <= 1)
-    return "1 mark — write ONE concise sentence (max 2 short lines). State the fact or definition directly. NO headings, NO 'Given/Step/Final Answer' sections — just the clean answer.";
+    return "1 mark - write ONE concise sentence (max 2 short lines). State the fact or definition directly. NO headings, NO 'Given/Step/Final Answer' sections - just the clean answer.";
   if (m <= 2)
-    return "2 marks — 2–3 short lines containing the key formula or the single main step. NO multi-section headings; keep it a tight, compact answer.";
+    return "2 marks - 2-3 short lines containing the key formula or the single main step. NO multi-section headings; keep it a tight, compact answer.";
   if (m <= 3)
-    return "3 marks — 4–6 lines. For numeric questions: Formula → Substitution → Result (one short line each). For theory: 3–4 sentences with the key reasoning. Light structure only.";
+    return "3 marks - 4-6 lines. For numeric questions: Formula → Substitution → Result (one short line each). For theory: 3-4 sentences with the key reasoning. Light structure only.";
   if (m <= 4)
-    return "4 marks — 6–10 lines with formula, worked steps, and final answer. Short `###` headings (Given / Formula / Steps / Answer) are okay if they clarify; skip them if not.";
+    return "4 marks - 6-10 lines with formula, worked steps, and final answer. Short `###` headings (Given / Formula / Steps / Answer) are okay if they clarify; skip them if not.";
   if (m <= 5)
-    return "5 marks — 10–15 lines, full derivation: Given → Formula → Steps → Final Answer. Use short `###` headings for each section.";
-  return "6+ marks — complete derivation with every step (15–25 lines). Use `###` headings for Given, Formula, Step 1, Step 2, …, Final Answer.";
+    return "5 marks - 10-15 lines, full derivation: Given → Formula → Steps → Final Answer. Use short `###` headings for each section.";
+  return "6+ marks - complete derivation with every step (15-25 lines). Use `###` headings for Given, Formula, Step 1, Step 2, …, Final Answer.";
 }
 
 export function fillTemplate(
@@ -247,6 +247,6 @@ export function fillTemplate(
 ): string {
   return template.replace(/\{(\w+)\}/g, (_, key: string) => {
     const v = values[key];
-    return v == null || v === "" ? "—" : String(v);
+    return v == null || v === "" ? "-" : String(v);
   });
 }

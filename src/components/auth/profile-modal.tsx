@@ -133,7 +133,7 @@ export function ProfileModal({ open, onOpenChange }: Props) {
   const linkPassword = async () => {
     setLinkErr(null);
     if (!u.email) {
-      setLinkErr("Your account doesn't have an email yet — sign in with Google first.");
+      setLinkErr("Your account doesn't have an email yet - sign in with Google first.");
       return;
     }
     if (addPwd.length < 6) {
@@ -210,7 +210,7 @@ export function ProfileModal({ open, onOpenChange }: Props) {
                 disabled={verifyBusy || verifySent}
                 className="mt-1 underline-offset-2 hover:underline disabled:opacity-60"
               >
-                {verifySent ? "Sent — check your inbox" : verifyBusy ? "Sending…" : "Resend verification email"}
+                {verifySent ? "Sent - check your inbox" : verifyBusy ? "Sending…" : "Resend verification email"}
               </button>
             </div>
           </div>

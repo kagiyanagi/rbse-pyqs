@@ -117,7 +117,7 @@ export function BookmarkNoteDialog({
             Note
           </DialogTitle>
           <DialogDescription>
-            Things to remember, the trick that solved it, gotchas, formulas — anything. Supports
+            Things to remember, the trick that solved it, gotchas, formulas - anything. Supports
             Markdown and LaTeX (use $…$ for inline math, $$…$$ for display).
           </DialogDescription>
         </DialogHeader>
@@ -162,7 +162,7 @@ export function BookmarkNoteDialog({
               placeholder={
                 generating
                   ? "Generating…"
-                  : "e.g. Use integration by parts with u = ln(x) — the trick is to spot $\\frac{d}{dx} \\tan x = \\sec^2 x$ in the numerator."
+                  : "e.g. Use integration by parts with u = ln(x) - the trick is to spot $\\frac{d}{dx} \\tan x = \\sec^2 x$ in the numerator."
               }
               disabled={generating}
               className="h-full min-h-[260px] resize-none font-mono text-sm"
@@ -222,12 +222,12 @@ function buildNotePrompt(q: QuestionPayload, mode: import("@/hooks/use-language"
   const sliced = extractByMode(q.question_text ?? "", mode);
   return `You are a Class 12 RBSE study coach. Produce a SHORT study note a student can re-read in 10 seconds to remember how to attack this question. This is a memory aid, NOT a worked solution.
 
-Question (subject: ${q.subject ?? "—"}, chapter: ${q.chapter ?? "—"}, topic: ${q.topic ?? "—"}, marks: ${q.marks ?? "—"}):
+Question (subject: ${q.subject ?? "-"}, chapter: ${q.chapter ?? "-"}, topic: ${q.topic ?? "-"}, marks: ${q.marks ?? "-"}):
 ${sliced}
 
-Language — STRICT: ${languageDirective(mode)}
+Language - STRICT: ${languageDirective(mode)}
 
-Output rules — follow strictly:
+Output rules - follow strictly:
 - 3 to 5 bullet points, each one short line. No headings. No introduction. No conclusion.
 - Each bullet should be one of: the key concept, the formula to apply, the trick / approach, a common pitfall, or what to memorise.
 - Inline math: $…$. Display math: $$…$$ on its own line. Never break $…$ across newlines.

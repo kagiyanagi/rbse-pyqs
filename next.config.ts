@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  allowedDevOrigins: ["192.168.1.38"],
   async rewrites() {
     if (!firebaseAuthDomain) return [];
     return [
