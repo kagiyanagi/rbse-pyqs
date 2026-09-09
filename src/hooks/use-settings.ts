@@ -224,28 +224,50 @@ export function useGeminiKeys() {
   return useLocalStorage<string[]>("geminiKeys", []);
 }
 
+// Google retires a model generation for NEW projects while existing ones keep it,
+// so a key created today gets 404 "no longer available to new users" on the 2.5
+// family that older keys still serve. Every id below was checked against both an
+// old and a freshly created key. Prefer the "-latest" aliases: they follow Google's
+// current generation, so the next retirement does not strand anyone again.
 export const GEMINI_MODELS = [
   {
-    id: "gemini-2.5-flash",
-    label: "Gemini 2.5 Flash",
-    description: "Recommended · fast, accurate for Class 12 math/physics",
+    id: "gemini-flash-latest",
+    label: "Gemini Flash (latest)",
+    description: "Recommended · tracks Google's current Flash, so it keeps working",
   },
   {
-    id: "gemini-2.5-pro",
-    label: "Gemini 2.5 Pro",
-    description: "Best quality on hard derivations · stricter free-tier quota",
+    id: "gemini-flash-lite-latest",
+    label: "Gemini Flash-Lite (latest)",
+    description: "Fastest and the largest free quota · weaker on long derivations",
   },
   {
-    id: "gemini-2.5-flash-lite",
-    label: "Gemini 2.5 Flash-Lite",
-    description: "Fastest · weaker on multi-step derivations",
+    id: "gemini-3.6-flash",
+    label: "Gemini 3.6 Flash",
+    description: "Pinned version · use when you want identical output over time",
+  },
+  {
+    id: "gemini-pro-latest",
+    label: "Gemini Pro (latest)",
+    description: "Best on hard derivations · needs billing, the free tier gets no Pro quota",
   },
 ] as const;
 
 export type GeminiModelId = (typeof GEMINI_MODELS)[number]["id"];
 
+export const DEFAULT_GEMINI_MODEL: GeminiModelId = "gemini-flash-latest";
+
+const RETIRED_MODEL_RE = /^gemini-(1\.5|2\.0|2\.5)-/;
+
 export function useGeminiModel() {
-  return useLocalStorage<GeminiModelId>("geminiModel", "gemini-2.5-flash");
+  const tuple = useLocalStorage<GeminiModelId>("geminiModel", DEFAULT_GEMINI_MODEL);
+  const [value, set, hydrated] = tuple;
+  // A saved 2.5 id keeps working on an older key but 404s on a newly created one,
+  // which reads as "my new key is broken". Move those settings forward once.
+  useEffect(() => {
+    if (!hydrated) return;
+    if (RETIRED_MODEL_RE.test(value)) set(DEFAULT_GEMINI_MODEL);
+  }, [hydrated, value, set]);
+  return tuple;
 }
 
 export function usePromptTemplate() {

@@ -75,6 +75,16 @@ export function formatGeminiError(err: unknown): FriendlyError {
         status: err.status,
       };
     }
+    if (err.status === 404 && /no longer available|not found/i.test(raw)) {
+      return {
+        title: "Model unavailable on this key",
+        hint:
+          "Google retires older models for newly created projects. Pick a different model " +
+          "below, or choose one of the \u201clatest\u201d entries in Settings, which follow Google's current generation.",
+        raw,
+        status: err.status,
+      };
+    }
     if (err.status >= 500) {
       return {
         title: "Gemini is down",
@@ -196,7 +206,8 @@ export async function* streamGeminiWithRotation(
 }
 
 export async function* streamGemini(opts: GeminiStreamOpts): AsyncGenerator<string, void, void> {
-  const model = opts.model ?? "gemini-2.5-flash";
+  // keep in sync with DEFAULT_GEMINI_MODEL in src/hooks/use-settings.ts
+  const model = opts.model ?? "gemini-flash-latest";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${encodeURIComponent(opts.apiKey)}`;
   const res = await fetch(url, {
     method: "POST",
