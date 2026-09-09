@@ -23,6 +23,16 @@ export class GeminiApiError extends Error {
    * rather than 401, so it has to be recognised by body before it can be treated
    * as a key fault instead of a bad prompt.
    */
+  /**
+   * Server-side overload rather than anything wrong with the request. Google returns
+   * 503 UNAVAILABLE "experiencing high demand" often enough on the free tier that a
+   * single attempt is not a fair test; these clear on a retry seconds later.
+   */
+  get isTransient(): boolean {
+    if (this.status === 500 || this.status === 502 || this.status === 503 || this.status === 504) return true;
+    return /UNAVAILABLE|high demand|overloaded/i.test(this.raw);
+  }
+
   get isKeyFault(): boolean {
     if (this.status === 401 || this.status === 403) return true;
     return this.status === 400 && /API_KEY_INVALID|API key not valid/i.test(this.raw);
@@ -85,10 +95,12 @@ export function formatGeminiError(err: unknown): FriendlyError {
         status: err.status,
       };
     }
-    if (err.status >= 500) {
+    if (err.isTransient) {
       return {
-        title: "Gemini is down",
-        hint: "Google's API returned a server error. Wait a moment and hit Regenerate.",
+        title: "Gemini is busy",
+        hint:
+          "Google's servers are overloaded right now. This was retried a few times already. " +
+          "Wait a few seconds and hit Regenerate, or switch to Flash-Lite, which is usually less contended.",
         raw,
         status: err.status,
       };
@@ -137,6 +149,30 @@ class KeyRotator {
 
 export const geminiKeyRotator = new KeyRotator();
 
+/** Backoff before each retry of a transient failure, in ms. Length sets the retry count. */
+const TRANSIENT_BACKOFF_MS = [800, 2000, 4500];
+
+function delay(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(new DOMException("Aborted", "AbortError"));
+    const t = setTimeout(() => {
+      signal?.removeEventListener("abort", onAbort);
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(t);
+      reject(new DOMException("Aborted", "AbortError"));
+    };
+    signal?.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
+export type RetryInfo = {
+  attempt: number;
+  of: number;
+  reason: GeminiApiError;
+};
+
 export type KeyAdvanceInfo = {
   fromIndex: number;
   toIndex: number;
@@ -146,6 +182,7 @@ export type KeyAdvanceInfo = {
 export type GeminiStreamMultiOpts = Omit<GeminiStreamOpts, "apiKey"> & {
   apiKeys: string[];
   onKeyAdvance?: (info: KeyAdvanceInfo) => void;
+  onTransientRetry?: (info: RetryInfo) => void;
 };
 
 // Tries each key in order (live keys first, then those nearest to coming off
@@ -169,37 +206,48 @@ export async function* streamGeminiWithRotation(
 
   for (let attempt = 0; attempt < order.length; attempt++) {
     const { key, index } = order[attempt];
-    if (opts.signal?.aborted) throw new DOMException("Aborted", "AbortError");
-    try {
-      for await (const chunk of streamGemini({
-        apiKey: key,
-        prompt: opts.prompt,
-        signal: opts.signal,
-        model: opts.model,
-      })) {
-        yielded = true;
-        yield chunk;
-      }
-      return;
-    } catch (e) {
-      lastError = e;
-      if (yielded) throw e;
-      if (opts.signal?.aborted) throw e;
-      if (e instanceof GeminiApiError) {
-        if (e.status === 429) {
-          geminiKeyRotator.markCooldown(key, e.retryAfterSec ?? 60);
+    let rotate = false;
+    for (let retry = 0; retry <= TRANSIENT_BACKOFF_MS.length && !rotate; retry++) {
+      if (opts.signal?.aborted) throw new DOMException("Aborted", "AbortError");
+      try {
+        for await (const chunk of streamGemini({
+          apiKey: key,
+          prompt: opts.prompt,
+          signal: opts.signal,
+          model: opts.model,
+        })) {
+          yielded = true;
+          yield chunk;
         }
-        const rotatable = e.status === 429 || e.isKeyFault;
-        if (rotatable && attempt + 1 < order.length) {
-          opts.onKeyAdvance?.({
-            fromIndex: index,
-            toIndex: order[attempt + 1].index,
-            reason: e,
-          });
-          continue;
+        return;
+      } catch (e) {
+        lastError = e;
+        // Once text has been emitted a retry would duplicate it, so never retry mid-stream.
+        if (yielded) throw e;
+        if (opts.signal?.aborted) throw e;
+        if (e instanceof GeminiApiError) {
+          if (e.isTransient && retry < TRANSIENT_BACKOFF_MS.length) {
+            opts.onTransientRetry?.({ attempt: retry + 1, of: TRANSIENT_BACKOFF_MS.length, reason: e });
+            await delay(TRANSIENT_BACKOFF_MS[retry], opts.signal);
+            continue;
+          }
+          if (e.status === 429) {
+            geminiKeyRotator.markCooldown(key, e.retryAfterSec ?? 60);
+          }
+          // A transient fault is worth one look at another key too: it may be routed elsewhere.
+          const rotatable = e.status === 429 || e.isKeyFault || e.isTransient;
+          if (rotatable && attempt + 1 < order.length) {
+            opts.onKeyAdvance?.({
+              fromIndex: index,
+              toIndex: order[attempt + 1].index,
+              reason: e,
+            });
+            rotate = true;
+            continue;
+          }
         }
+        throw e;
       }
-      throw e;
     }
   }
   throw lastError ?? new Error("All API keys exhausted.");
