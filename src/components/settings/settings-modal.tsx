@@ -134,7 +134,7 @@ export function SettingsModal() {
                 <div key={idx} className="flex items-center gap-1.5">
                   <Input
                     type="password"
-                    placeholder="AIzaSy…  (paste a list to split into rows)"
+                    placeholder="AIzaSy… or AQ.…  (paste a list to split into rows)"
                     value={key}
                     onChange={(e) => {
                       const next = [...apiKeys];
