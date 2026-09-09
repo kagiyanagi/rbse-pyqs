@@ -226,6 +226,49 @@ export async function* streamGemini(opts: GeminiStreamOpts): AsyncGenerator<stri
   }
 }
 
+/**
+ * Prompt for repairing a mangled question row. The extraction pipeline sometimes
+ * drops a closing `$`, runs words together, mixes the Hindi and English halves or
+ * mangles option markers. The model only reformats: it must not solve, translate
+ * or invent content, because a "fixed" question that no longer matches the paper
+ * is worse than a badly rendered one.
+ */
+export function buildFixPrompt(input: {
+  text: string;
+  subject: string | null;
+  chapter: string | null;
+  marks: number | null;
+  questionType: string | null;
+}): string {
+  return [
+    "You repair OCR-damaged exam questions from RBSE Class 12 board papers.",
+    "",
+    `Subject: ${input.subject ?? "unknown"}`,
+    `Chapter: ${input.chapter ?? "unknown"}`,
+    `Marks: ${input.marks ?? "unknown"}`,
+    `Question type: ${input.questionType ?? "unknown"}`,
+    "",
+    "Repair ONLY the formatting of the question below. Rules:",
+    "1. Do NOT answer, solve, explain or comment on the question.",
+    "2. Do NOT translate. Keep the Hindi text Hindi and the English text English.",
+    "   If both versions are present, keep both: Hindi block first, then a blank line, then English.",
+    "3. Fix broken LaTeX. Every inline formula must be wrapped in a matched pair of single dollars,",
+    "   every display formula in a matched pair of double dollars. Never leave an unmatched dollar.",
+    "   Plain prose must stay OUTSIDE the dollars, never inside \\text{...} covering a whole sentence.",
+    "4. Restore spaces between words that were run together, and normal sentence punctuation.",
+    "5. Put each multiple-choice option on its own line, labelled (A) (B) (C) (D) or (अ) (ब) (स) (द)",
+    "   to match the language of that block. Keep the options in their original order.",
+    "6. Keep fill-in-the-blank gaps as a run of underscores.",
+    "7. Do not add a question number, marks, headings, commentary, markdown fences or backticks.",
+    "8. If the text is already clean, return it unchanged.",
+    "",
+    "Return ONLY the repaired question text, as plain text with LaTeX dollars and no backticks.",
+    "",
+    "--- QUESTION ---",
+    input.text,
+  ].join("\n");
+}
+
 export function marksGuidance(marks: number | null | undefined): string {
   const m = marks ?? 0;
   if (m <= 1)

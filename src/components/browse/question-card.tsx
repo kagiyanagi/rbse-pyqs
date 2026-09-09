@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Languages, Lightbulb, NotebookPen, Pencil } from "lucide-react";
+import { Check, Languages, Lightbulb, NotebookPen, Pencil, RotateCcw, Wand2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -13,11 +13,15 @@ import { BookmarkNoteDialog } from "@/components/bookmark-note-dialog";
 import { MathContent } from "@/components/math-content";
 import type { QuestionPayload } from "@/types";
 import { useAnswered } from "@/hooks/use-answered";
+import { useQuestionFixes } from "@/hooks/use-question-fixes";
+import { useGeminiKeys, useGeminiModel } from "@/hooks/use-settings";
+import { useToast } from "@/components/ui/toaster";
+import { buildFixPrompt, formatGeminiError, streamGeminiWithRotation } from "@/lib/gemini";
 import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useDefaultLanguage, useLanguageOverrides, type LanguageMode } from "@/hooks/use-language";
 import { cn } from "@/lib/utils";
-import { questionDisplayText } from "@/lib/export";
-import { useMemo, useState } from "react";
+import { cleanAiText, questionDisplayText, withQuestionFix } from "@/lib/export";
+import { useMemo, useRef, useState } from "react";
 
 function langSymbol(mode: LanguageMode) {
   if (mode === "english") return "EN";
@@ -52,6 +56,12 @@ export function QuestionCard({
   focused?: boolean;
 }) {
   const { isAnswered, toggle: toggleAnswered } = useAnswered();
+  const { get: getFix, save: saveFix, remove: removeFix } = useQuestionFixes();
+  const [apiKeys] = useGeminiKeys();
+  const [model] = useGeminiModel();
+  const toast = useToast();
+  const [fixing, setFixing] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
   const [defaultLang] = useDefaultLanguage();
   const { get, cycle } = useLanguageOverrides();
   const { get: getNote } = useBookmarkNotes();
@@ -61,7 +71,50 @@ export function QuestionCard({
   const mode = get(q.id, defaultLang);
   const answered = isAnswered(q.id);
 
-  const display = useMemo(() => questionDisplayText(q, mode), [q, mode]);
+  const fix = getFix(q.id);
+  const shown = useMemo(() => withQuestionFix(q, fix?.text), [q, fix?.text]);
+  const display = useMemo(() => questionDisplayText(shown, mode), [shown, mode]);
+
+  // Repairs formatting only. The source row in Turso is read-only, so the result is
+  // stored per browser and applied as a display overlay that Undo removes.
+  const runFix = async () => {
+    if (fixing) return;
+    if (apiKeys.length === 0) {
+      toast.error("No API key", "Add a Gemini API key in Settings to fix questions.");
+      return;
+    }
+    abortRef.current?.abort();
+    const ac = new AbortController();
+    abortRef.current = ac;
+    setFixing(true);
+    try {
+      const prompt = buildFixPrompt({
+        text: q.question_text ?? q.question_latex ?? "",
+        subject: q.subject,
+        chapter: q.chapter,
+        marks: q.marks,
+        questionType: q.question_type,
+      });
+      let acc = "";
+      for await (const chunk of streamGeminiWithRotation({ apiKeys, prompt, model, signal: ac.signal })) {
+        acc += chunk;
+      }
+      const cleaned = cleanAiText(acc);
+      if (ac.signal.aborted) return;
+      if (!cleaned) {
+        toast.error("Fix failed", "The model returned nothing. Try again.");
+        return;
+      }
+      saveFix(q.id, cleaned);
+      toast.success("Question fixed", "Stored in this browser. Use Undo to restore the original.");
+    } catch (e: unknown) {
+      if (ac.signal.aborted) return;
+      const friendly = formatGeminiError(e);
+      toast.error(friendly.title, friendly.hint);
+    } finally {
+      setFixing(false);
+    }
+  };
 
   return (
     <div
@@ -114,11 +167,26 @@ export function QuestionCard({
         </div>
       )}
 
+      {fix && (
+        <div className="mt-2 flex items-center gap-2 text-[11px] text-amber-600 dark:text-amber-400">
+          <Wand2 className="h-3 w-3" />
+          <span>Formatting repaired by AI, stored in this browser.</span>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1 underline underline-offset-2 hover:text-foreground"
+            onClick={() => removeFix(q.id)}
+          >
+            <RotateCcw className="h-3 w-3" />
+            Undo
+          </button>
+        </div>
+      )}
+
       <div
         className="question-text mt-3 max-w-full overflow-x-auto whitespace-pre-wrap break-words text-foreground"
         style={{ fontSize: "calc(1rem * var(--question-scale, 1))", lineHeight: 1.6 }}
       >
-        {q.question_latex ? (
+        {shown.question_latex ? (
           <MathContent key={`${q.id}:${mode}:${display.length}`}>
             <span>{searchQuery ? highlight(display, searchQuery) : display}</span>
           </MathContent>
@@ -195,6 +263,18 @@ export function QuestionCard({
         >
           <Languages className="h-4 w-4" />
           <span>{langSymbol(mode)}</span>
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn("h-8 gap-1.5", fix && "text-amber-600 dark:text-amber-400")}
+          onClick={runFix}
+          disabled={fixing}
+          data-action="fix"
+          title="Repair broken LaTeX, run-together words or mixed-up languages in this question"
+        >
+          <Wand2 className={cn("h-4 w-4", fixing && "animate-pulse")} />
+          <span className="hidden sm:inline">{fixing ? "Fixing…" : fix ? "Fixed" : "Fix"}</span>
         </Button>
         <BookmarkPicker question={q} />
         <Button

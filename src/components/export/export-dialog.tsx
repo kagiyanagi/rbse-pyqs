@@ -25,6 +25,7 @@ import {
 import { useToast } from "@/components/ui/toaster";
 import { useBookmarkNotes } from "@/hooks/use-bookmark-notes";
 import { useSolutionCache } from "@/hooks/use-solutions";
+import { useQuestionFixes } from "@/hooks/use-question-fixes";
 import { useDefaultLanguage, useLanguageOverrides, type LanguageMode } from "@/hooks/use-language";
 import {
   buildLatex,
@@ -32,6 +33,7 @@ import {
   downloadTextFile,
   exportFilename,
   totalMarksOf,
+  withQuestionFix,
   type ExportItem,
   type ExportOptions,
 } from "@/lib/export";
@@ -71,6 +73,7 @@ export function ExportDialog({
   const toast = useToast();
   const { get: getNote } = useBookmarkNotes();
   const { get: getSolution } = useSolutionCache();
+  const { get: getFix } = useQuestionFixes();
   const [defaultLang] = useDefaultLanguage();
   const { get: getLangOverride } = useLanguageOverrides();
 
@@ -103,12 +106,12 @@ export function ExportDialog({
   const items: ExportItem[] = useMemo(
     () =>
       questions.map((q) => ({
-        question: q,
+        question: withQuestionFix(q, getFix(q.id)?.text),
         note: getNote(q.id) || undefined,
         solution: getSolution(q.id) || undefined,
         language: language === "auto" ? getLangOverride(q.id, defaultLang) : undefined,
       })),
-    [questions, getNote, getSolution, language, getLangOverride, defaultLang],
+    [questions, getNote, getSolution, getFix, language, getLangOverride, defaultLang],
   );
 
   const solutionCount = useMemo(() => items.filter((it) => it.solution).length, [items]);

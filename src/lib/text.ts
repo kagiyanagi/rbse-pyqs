@@ -3,8 +3,19 @@ import type { LanguageMode } from "@/hooks/use-language";
 export const HINDI_RE = /[ऀ-ॿ]/;
 const ENGLISH_WORD_RE = /[A-Za-z]{4,}/;
 
+// The source data uses a literal backslash-n as a line separator, but LaTeX
+// commands also start with one: \nu, \neq, \nabla, \node. Converting those
+// leaves a stray `u}` / `eq`, which unbalances the `$` pairing and makes MathJax
+// swallow the surrounding prose. A LaTeX command name is always lowercase, and a
+// genuine separator in this data is followed by a capital, Devanagari, a digit or
+// space, so require a non-lowercase character after the escape.
+const LITERAL_NEWLINE = /\\n(?![a-z])/g;
+
+/** Split on literal backslash-n separators and real newlines, sparing LaTeX commands. */
+export const LINE_SPLIT = /\\n(?![a-z])|\r?\n/;
+
 export function normalizeNewlines(s: string): string {
-  return s.replace(/\\n/g, "\n");
+  return s.replace(LITERAL_NEWLINE, "\n");
 }
 
 // The source data occasionally drops the closing `$` of an inline-math span, so
@@ -67,7 +78,7 @@ function classifyLine(line: string): "hindi" | "english" | "neutral" {
 }
 
 export function dedupeLines(text: string): string {
-  const lines = text.split(/\\n|\r?\n/);
+  const lines = text.split(LINE_SPLIT);
   const seen = new Set<string>();
   const out: string[] = [];
   for (const raw of lines) {
@@ -81,7 +92,7 @@ export function dedupeLines(text: string): string {
 }
 
 export function splitLanguages(text: string): { english: string; hindi: string } {
-  const lines = text.split(/\\n|\r?\n/);
+  const lines = text.split(LINE_SPLIT);
   const en: string[] = [];
   const hi: string[] = [];
   const seenEn = new Set<string>();

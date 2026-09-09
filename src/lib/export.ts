@@ -15,6 +15,27 @@ import {
  * QuestionCard, the print view and the file exporters all go through this so a
  * printed question is character-for-character what the card shows.
  */
+/**
+ * Strip markdown decoration a model adds despite being told not to: surrounding code
+ * fences, and backticks wrapping a math span, which would render as code not maths.
+ */
+export function cleanAiText(s: string): string {
+  return s
+    .replace(/^\s*```[a-z]*\n?/i, "")
+    .replace(/\n?```\s*$/, "")
+    .replace(/`+(\$[^`\n]*?\$)`+/g, "$1")
+    .trim();
+}
+
+/**
+ * Overlay an AI-repaired text onto a question row. Both text fields are replaced so
+ * language splitting and MathJax rendering run against the repaired version.
+ */
+export function withQuestionFix(q: QuestionPayload, fixed: string | undefined): QuestionPayload {
+  if (!fixed) return q;
+  return { ...q, question_text: fixed, question_latex: fixed };
+}
+
 export function questionDisplayText(q: QuestionPayload, mode: LanguageMode): string {
   const raw = q.question_latex || q.question_text || "";
   const text = normalizeNewlines(raw);
