@@ -19,6 +19,14 @@ pnpm exec tsx scripts/migrate-from-sqlite.ts      # truncate + copy ../questions
 pnpm tsx --env-file=.env.local scripts/upload-papers.ts <papers-dir>   # needs BLOB_READ_WRITE_TOKEN
 ```
 
+Prediction data (Python, no Turso needed; `pip install -r scripts/predict/requirements.txt`):
+
+```bash
+python scripts/predict/build_predictions.py [--embeddings scripts/predict/emb]   # ../questions.db -> src/data/predictions.json, prints a backtest report
+python scripts/predict/merge_model_papers.py --base ../rbse-qbank/questions.db --extra <unfiltered-latex.db> --out ../questions.db
+GEMINI_API_KEY=... python scripts/predict/parse_blueprints.py --pdf-dir <blueprint pdfs>   # -> scripts/predict/blueprints.json
+```
+
 There is no test framework in this repo. Verification is lint, typecheck, and running the app.
 
 ## Architecture
@@ -30,6 +38,8 @@ A Next.js 16 App Router port of an earlier Flask app. One read-only Turso (libSQ
 **Canonical chapter names are the core domain problem.** The `chapter` column holds duplicates, typos, and older-syllabus names. `src/lib/syllabus.ts` owns the canonical subject and chapter lists and `canonicalizeChapter`, which normalizes (case, punctuation, leading "the"), applies a typo table, extracts Hindi/English lesson codes like `Lhar101`, splits multi-chapter strings, and otherwise returns the `Older / out-of-syllabus` bucket. `src/lib/syllabus-aliases.ts` builds the reverse map lazily from distinct DB rows. The questions route expands a canonical chapter filter back into every raw variant before building the SQL. Any new chapter-aware feature must go through these two modules rather than matching the raw column.
 
 **Two lazy in-process caches**, both a memoized promise with an `invalidate*` export: `getProbCache` in `src/lib/prob-cache.ts` (per-chapter appearance probability, year breakdown, top topics) and `getChapterAliases`. They persist for the lifetime of a serverless instance, so a data migration is not reflected until instances recycle.
+
+**Question-level predictions are precomputed, not queried.** `scripts/predict/build_predictions.py` reads the merged `../questions.db` (real papers plus official model papers appended by `merge_model_papers.py`), clusters PCM questions into families with a lexical similarity and into topics with a semantic one (optional Gemini embeddings from `embed_questions.py`), scores each family with a recency-decayed kernel of its appearances in real and model papers, splits each chapter's expected question count over its families, and tunes its hyper-parameters by out-of-sample log-loss on backtests that mirror the forecast situation (newest real paper two years old, newest model paper one year old). Official blueprint tables parsed by `parse_blueprints.py` into `scripts/predict/blueprints.json` supply the chapter marks. It writes `src/data/predictions.json`, which `src/lib/predictions.ts` imports server-side; the questions route attaches `prediction` per row (`p` similar, `px` exact, `pt` topic) and implements the `predicted` sort order and the `prob_tiers` band filter in-process (bands defined once in `src/lib/prediction-tiers.ts`, shared with the badge), one row per family when sorting by prediction. Re-run the script after every `questions.db` rebuild; its `CANON`/`TYPOS` tables must stay in sync with `src/lib/syllabus.ts`. Hindi/English rows have no prediction and fall back to the chapter-level badge.
 
 **Filters are URL-search-param driven end to end.** `src/lib/filters.ts` parses repeated params with a legacy singular fallback, handles the `"5+"` open-ended marks bucket, and builds the Drizzle `where`. `target_marks_total` is a greedy pack over the first 500 ordered candidates, not a SQL limit.
 

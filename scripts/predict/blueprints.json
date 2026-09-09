@@ -1,0 +1,2152 @@
+{
+ "chemistry_2023": {
+  "total_marks": 56,
+  "duration": "3 घण्टे 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "ठोस अवस्था",
+    "name_english": "Solid State",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "विलयन",
+    "name_english": "Solutions",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "वैधुत रसायन",
+    "name_english": "Electrochemistry",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "दीर्घ-उत्तरीय": 2,
+     "अतिलघूत्तरात्मक": 1
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "रासायनिक बलगतिकी",
+    "name_english": "Chemical Kinetics",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 2,
+     "अतिलघूत्तरात्मक": 2
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "पृष्ठ रसायन",
+    "name_english": "Surface Chemistry",
+    "marks": 4,
+    "by_type": {
+     "निबंधात्मक": 4
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "तत्वों के निष्कर्षण के सिद्धान्त एवं प्रक्रम",
+    "name_english": "General Principles and Processes of Isolation of Elements",
+    "marks": 2,
+    "by_type": {
+     "वस्तुनिष्ठ": 2
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "P- ब्लॉक के तत्व",
+    "name_english": "p-Block Elements",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अतिलघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "d एवं f ब्लॉक के तत्व",
+    "name_english": "d- and f-Block Elements",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "उपसहसंयोजन यौगिक",
+    "name_english": "Coordination Compounds",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "दीर्घ-उत्तरीय": 3
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "हैलोऐल्केन तथा हैलो ऐरीन",
+    "name_english": "Haloalkanes and Haloarenes",
+    "marks": 4,
+    "by_type": {
+     "निबंधात्मक": 4
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "ऐल्कोहॉल, फीनॉल एवं ईथर",
+    "name_english": "Alcohols, Phenols and Ethers",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अतिलघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल",
+    "name_english": "Aldehydes, Ketones and Carboxylic Acids",
+    "marks": 5,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1,
+     "वस्तुनिष्ठ": 1,
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "ऐमीन",
+    "name_english": "Amines",
+    "marks": 4,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1,
+     "दीर्घ-उत्तरीय": 3
+    }
+   },
+   {
+    "unit_no": 14,
+    "name_hindi": "जैव अणु",
+    "name_english": "Biomolecules",
+    "marks": 2,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अतिलघूत्तरात्मक": 1
+    }
+   },
+   {
+    "unit_no": 15,
+    "name_hindi": "बहुलक",
+    "name_english": "Polymers",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 16,
+    "name_hindi": "दैनिक जीवन में रसायन",
+    "name_english": "Chemistry in Everyday Life",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "वस्तुनिष्ठ",
+    "marks_each": 1,
+    "count": 9
+   },
+   {
+    "type": "अतिलघूत्तरात्मक",
+    "marks_each": 1,
+    "count": 12
+   },
+   {
+    "type": "लघूत्तरात्मक",
+    "marks_each": 1.5,
+    "count": 12
+   },
+   {
+    "type": "दीर्घउत्तरीय प्रश्न",
+    "marks_each": 3,
+    "count": 3
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 17.5,
+   "अवबोध": 24.0,
+   "अभिव्यक्ति": 11.5,
+   "मौलिकता": 3.0
+  },
+  "notes": "विकल्पों की योजना :- प्र.सं. 19 व 20 में एक आंतरिक विकल्प है। प्रश्न पत्र में मूल प्रश्न 20 है, जो प्रकारान्तर से कुल 38 है। नोटः- कोष्ठक में बाहर की संख्या अंकों की तथा भीतर प्रश्नों की द्योतक है। प्र.स. - 1 में 9 प्र., प्र.स. - 2 में 4 प्र. व प्र.स. - 3 में 8 प्र. समाहित है।"
+ },
+ "chemistry_2024": {
+  "total_marks": 56,
+  "duration": "3 hours 15 minutes",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "विलयन",
+    "name_english": "Solution",
+    "marks": 6,
+    "by_type": {
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Short Answer": 2.0,
+     "Long Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "वैधुत रसायन",
+    "name_english": "Electrochemistry",
+    "marks": 6,
+    "by_type": {
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Very Short Answer": 1.0,
+     "Short Answer": 4.0
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "रासायनिक बलगतिकी",
+    "name_english": "Chemical Kinetics",
+    "marks": 6,
+    "by_type": {
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Long Answer": 3.0,
+     "Very Short Answer": 0.5,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "d एवं f ब्लॉक केतत्व",
+    "name_english": "The d- and f-Block Elements",
+    "marks": 5,
+    "by_type": {
+     "Very Short Answer": 1.0,
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Short Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "उप सहसंयोजन यौगिक",
+    "name_english": "Coordination Compounds",
+    "marks": 5,
+    "by_type": {
+     "Very Short Answer": 2.5,
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "हैलोएल्फेन तथा हैलोऐरीन",
+    "name_english": "Haloalkanes and Haloarenes",
+    "marks": 6,
+    "by_type": {
+     "Objective": 0.5,
+     "Short Answer": 4.5,
+     "Very Short Answer": 1.0
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "एल्कोहल, फिनॉल और ईथर",
+    "name_english": "Alcohols, Phenols and Ethers",
+    "marks": 6,
+    "by_type": {
+     "Objective": 0.5,
+     "Short Answer": 3.5,
+     "Long Answer": 3.0,
+     "Very Short Answer": 0.5
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल",
+    "name_english": "Aldehydes, Ketones and Carboxylic Acids",
+    "marks": 7,
+    "by_type": {
+     "Essay Type": 4.0,
+     "Long Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "ऐमीन",
+    "name_english": "Amines",
+    "marks": 5,
+    "by_type": {
+     "Very Short Answer": 1.5,
+     "Long Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "जैव अणु",
+    "name_english": "Biomolecules",
+    "marks": 4,
+    "by_type": {
+     "Very Short Answer": 2.5,
+     "Fill in the Blanks": 0.5
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "Objective",
+    "marks_each": 0.5,
+    "count": 16
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "Very Short Answer",
+    "marks_each": 1.0,
+    "count": 8
+   },
+   {
+    "type": "Short Answer",
+    "marks_each": 1.5,
+    "count": 12
+   },
+   {
+    "type": "Long Answer",
+    "marks_each": 3.0,
+    "count": 3
+   },
+   {
+    "type": "Essay Type",
+    "marks_each": 4.0,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "Knowledge": 17.5,
+   "Understanding": 24.0,
+   "Application/Expression": 11.5,
+   "Skill / Originality": 3.0
+  },
+  "notes": "Option scheme: Sections 'C' and 'D' each have an internal option. Note: The number outside the bracket denotes 'marks' and the number inside the bracket denotes 'questions'."
+ },
+ "chemistry_2025": {
+  "total_marks": 56,
+  "duration": "3 घण्टे 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "विलयन",
+    "name_english": "Solutions",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.5,
+     "रिक्तस्थान": 0.5,
+     "अतिलघूत्तरात्मक": 0,
+     "लघूत्तरात्मक": 4.5,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "वैद्युत रसायन",
+    "name_english": "Electrochemistry",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 1,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घउत्तरात्मक": 4,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "रासायनिक बलगतिकी",
+    "name_english": "Chemical Kinetics",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 2,
+     "रिक्तस्थान": 0.5,
+     "अतिलघूत्तरात्मक": 3,
+     "lघूत्तरात्मक": 0,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "d एवं f ब्लॉक के तत्व",
+    "name_english": "The d- and f-Block Elements",
+    "marks": 5,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 3,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "उपसहसंयोजन यौगिक",
+    "name_english": "Coordination Compounds",
+    "marks": 5,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "रिक्तस्थान": 1,
+     "अतिलघूत्तरात्मक": 2,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "हैलोएल्केन एवं हैलोएरीन",
+    "name_english": "Haloalkanes and Haloarenes",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.5,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 0,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 3,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "एल्कोहल, फीनॉल एवं ईथर",
+    "name_english": "Alcohols, Phenols and Ethers",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 3,
+     "निबंधात्मक": 0
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "एल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल",
+    "name_english": "Aldehydes, Ketones and Carboxylic Acids",
+    "marks": 7,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.5,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 8
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "एमीन",
+    "name_english": "Amines",
+    "marks": 5,
+    "by_type": {
+     "बहुविकल्पात्मक": 1,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घउत्तरात्मक": 3,
+     "निबंधात्मक": 3
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "जैव-अणु",
+    "name_english": "Biomolecules",
+    "marks": 4,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.5,
+     "रिक्तस्थान": 0,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 0,
+     "निबंधात्मक": 0
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "बहुविकल्पात्मक",
+    "marks_each": 0.5,
+    "count": 18
+   },
+   {
+    "type": "रिक्तस्थान",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "अतिलघूत्तरात्मक",
+    "marks_each": 1,
+    "count": 10
+   },
+   {
+    "type": "लघूत्तरात्मक",
+    "marks_each": 1.5,
+    "count": 10
+   },
+   {
+    "type": "दीर्घउत्तरात्मक",
+    "marks_each": 3,
+    "count": 3
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 17,
+   "अवबोध": 17,
+   "ज्ञानोपयोग": 11,
+   "कौशल": 5.5,
+   "विश्लेषण": 5.5
+  },
+  "notes": "The blueprint contains internal inconsistencies. The sum of marks for question types within some units (e.g., Unit 1, 3, 4, 8, 9) does not match the total marks specified for that unit. Also, marks assigned to 'दीर्घउत्तरात्मक' and 'निबंधात्मक' questions in unit breakdowns sometimes differ from the standard marks per question type defined in the overall 'प्रश्नों के प्रकारवारअंकभार' table."
+ },
+ "chemistry_2026": {
+  "total_marks": 56,
+  "duration": "3 घण्टे 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "विलयन",
+    "name_english": "Solutions",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 0.5,
+     "लघूत्तरात्मक": 1.5,
+     "निबंधात्मक": 4
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "वैद्युत रसायन",
+    "name_english": "Electrochemistry",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "दीर्घउत्तरात्मक": 3,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "रासायनिक बलगतिकी",
+    "name_english": "Chemical Kinetics",
+    "marks": 6,
+    "by_type": {
+     "रिक्तस्थान": 0.5,
+     "निबंधात्मक": 4,
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "d एवं f ब्लॉक के तत्व",
+    "name_english": "d- and f-Block Elements",
+    "marks": 5,
+    "by_type": {
+     "रिक्तस्थान": 0.5,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5,
+     "बहुविकल्पात्मक": 0.5,
+     "दीर्घउत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "उपसहसंयोजन यौगिक",
+    "name_english": "Coordination Compounds",
+    "marks": 5,
+    "by_type": {
+     "बहुविकल्पात्मक": 1,
+     "अतिलघूत्तरात्मक": 1,
+     "दीर्घउत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "हैलोएल्केन एवं हैलोएरीन",
+    "name_english": "Haloalkanes and Haloarenes",
+    "marks": 6,
+    "by_type": {
+     "बहुविकल्पात्मक": 1,
+     "अतिलघूत्तरात्मक": 2,
+     "लघूत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "एल्कोहल, फीनॉल एवं ईथर",
+    "name_english": "Alcohols, Phenols and Ethers",
+    "marks": 6,
+    "by_type": {
+     "रिक्तस्थान": 1,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 3
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "एल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल",
+    "name_english": "Aldehydes, Ketones and Carboxylic Acids",
+    "marks": 7,
+    "by_type": {
+     "बहुविकल्पात्मक": 1,
+     "निबंधात्मक": 4,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "एमीन",
+    "name_english": "Amines",
+    "marks": 5,
+    "by_type": {
+     "लघूत्तरात्मक": 4.5,
+     "बहुविकल्पात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "जैव-अणु",
+    "name_english": "Biomolecules",
+    "marks": 4,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1,
+     "लघूत्तरात्मक": 1.5,
+     "रिक्तस्थान": 0.5
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "बहुविकल्पात्मक",
+    "marks_each": 0.5,
+    "count": 18
+   },
+   {
+    "type": "रिक्तस्थान",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "अतिलघूत्तरात्मक",
+    "marks_each": 1,
+    "count": 10
+   },
+   {
+    "type": "लघूत्तरात्मक",
+    "marks_each": 1.5,
+    "count": 10
+   },
+   {
+    "type": "दीर्घउत्तरात्मक",
+    "marks_each": 3,
+    "count": 3
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 17,
+   "अवबोध": 17,
+   "ज्ञानोपयोग": 11,
+   "कौशल": 5.5,
+   "विश्लेषण": 5.5
+  },
+  "notes": "विकल्प योजना : खण्ड 'स' एवं 'द' में हैं। विकल्पों की योजना :- खण्ड 'स' एवं 'द' में प्रत्येक में एक आंतरिक विकल्प है। नोटः- कोष्ठक के बाहर की संख्या 'अंकों' की तथा अंदर की संख्या 'प्रश्नों' के द्योतक है। विशेष :- उक्त ब्ल्यू प्रिन्ट मॉडल प्रश्न पत्र का है जो प्रश्नों के प्रकारों को समझने की सुविधा मात्र के लिए है। मूल प्रश्न पत्र का ब्ल्यू प्रिन्ट भिन्न हो सकता है।"
+ },
+ "mathematics_2023": {
+  "total_marks": 80,
+  "duration": "3 hours 15 minutes",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "सम्बन्ध एवं फलन",
+    "name_english": "Relations and Functions",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "प्रतिलोम त्रिकोणमितीय फलन",
+    "name_english": "Inverse Trigonometric Functions",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "आव्यूह",
+    "name_english": "Matrices",
+    "marks": 5,
+    "by_type": null
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "सारणिक",
+    "name_english": "Determinants",
+    "marks": 5,
+    "by_type": null
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "सांतत्यता एवं अवकलनीयता",
+    "name_english": "Continuity and Differentiability",
+    "marks": 8,
+    "by_type": null
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "अवकलजों के अनुप्रयोग",
+    "name_english": "Applications of Derivatives",
+    "marks": 6,
+    "by_type": null
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "समाकलन",
+    "name_english": "Integrals",
+    "marks": 12,
+    "by_type": null
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "समाकलनों के अनुप्रयोग",
+    "name_english": "Applications of Integrals",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "अवकल समीकरण",
+    "name_english": "Differential Equations",
+    "marks": 6,
+    "by_type": null
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "सदिश बीजगणित",
+    "name_english": "Vector Algebra",
+    "marks": 7,
+    "by_type": null
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "त्रिविमीय ज्यामिति",
+    "name_english": "Three Dimensional Geometry",
+    "marks": 9,
+    "by_type": null
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "रैखिक प्रोग्रामन",
+    "name_english": "Linear Programming",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "प्रायिकता",
+    "name_english": "Probability",
+    "marks": 7,
+    "by_type": null
+   }
+  ],
+  "question_types": [
+   {
+    "type": "वस्तुनिष्ठ",
+    "marks_each": 1,
+    "count": 18
+   },
+   {
+    "type": "अतिलघुत्तरात्मक",
+    "marks_each": 1,
+    "count": 12
+   },
+   {
+    "type": "लघुत्तरात्मक",
+    "marks_each": 2,
+    "count": 13
+   },
+   {
+    "type": "दीर्घउत्तरात्मक",
+    "marks_each": 3,
+    "count": 4
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4,
+    "count": 3
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 26,
+   "अवबोध": 29,
+   "अभिव्यक्ति": 23,
+   "मौलिकता": 2
+  },
+  "notes": "The blueprint contains inconsistencies. The 'प्रश्नों के प्रकारवार अंकभार' table (Table 1) on page 1, when scaled to 80 total marks using its 'अंक प्रति प्रश्न' values, results in 50 questions. This contradicts the overall paper total of 23 questions explicitly stated in the blueprint (page 2, '80(23)'). The question type breakdown (counts and marks per question) is derived from this scaled interpretation of Table 1. The objective weightage and unit weightage are consistent with the 80-mark total."
+ },
+ "mathematics_2024": {
+  "total_marks": 80,
+  "duration": "3 घण्टे 15 मिनट",
+  "objective_weightage": {
+   "Knowledge": 24,
+   "Understanding": 20,
+   "Application/Expression": 24,
+   "Skill/Originality": 12
+  },
+  "question_types": [
+   {
+    "type": "Objective",
+    "marks_each": 1,
+    "count": 15
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 1,
+    "count": 7
+   },
+   {
+    "type": "Very Short Answer",
+    "marks_each": 1,
+    "count": 10
+   },
+   {
+    "type": "Short Answer",
+    "marks_each": 2,
+    "count": 12
+   },
+   {
+    "type": "Long Answer",
+    "marks_each": 3,
+    "count": 4
+   },
+   {
+    "type": "Essay Type",
+    "marks_each": 4,
+    "count": 3
+   }
+  ],
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "सम्बन्ध एवं फलन",
+    "name_english": "Relations and Functions",
+    "marks": 3,
+    "by_type": {
+     "Objective": 1,
+     "Short Answer": 2
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "प्रतिलोम त्रिकोणमितीय फलन",
+    "name_english": "Inverse Trigonometric Functions",
+    "marks": 4,
+    "by_type": {
+     "Objective": 1,
+     "Short Answer": 1,
+     "Long Answer": 2
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "आव्यूह",
+    "name_english": "Matrices",
+    "marks": 5,
+    "by_type": {
+     "Objective": 1,
+     "Short Answer": 4
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "सारणिक",
+    "name_english": "Determinants",
+    "marks": 5,
+    "by_type": {
+     "Objective": 2,
+     "Short Answer": 2
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "सांतत्यता एवं अवकलनीयता",
+    "name_english": "Continuity and Differentiability",
+    "marks": 8,
+    "by_type": {
+     "Objective": 1,
+     "Very Short Answer": 1,
+     "Short Answer": 4
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "अवकलजो के अनुपयोग",
+    "name_english": "Application of Derivatives",
+    "marks": 6,
+    "by_type": {
+     "Objective": 1,
+     "Very Short Answer": 1,
+     "Short Answer": 3,
+     "Long Answer": 1
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "समाकलन",
+    "name_english": "Integrals",
+    "marks": 12,
+    "by_type": {
+     "Objective": 1,
+     "Short Answer": 3,
+     "Essay Type": 4,
+     "Long Answer": 3
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "सकाकलनो के अनुपयोग",
+    "name_english": "Application of Integrals",
+    "marks": 4,
+    "by_type": {
+     "Objective": 1,
+     "Very Short Answer": 1,
+     "Short Answer": 2
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "अवकल समीकरण",
+    "name_english": "Differential Equations",
+    "marks": 6,
+    "by_type": {
+     "Objective": 1,
+     "Very Short Answer": 1,
+     "Short Answer": 1,
+     "Long Answer": 3
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "सदिश बीजगणित",
+    "name_english": "Vector Algebra",
+    "marks": 7,
+    "by_type": {
+     "Objective": 1,
+     "Very Short Answer": 1,
+     "Short Answer": 4
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "त्रिविमीय ज्यामिति",
+    "name_english": "Three Dimensional Geometry",
+    "marks": 9,
+    "by_type": {
+     "Objective": 1,
+     "Essay Type": 4,
+     "Long Answer": 3
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "रैखिक प्रोग्रामन",
+    "name_english": "Linear Programming",
+    "marks": 4,
+    "by_type": {
+     "Essay Type": 4
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "प्रायिकता",
+    "name_english": "Probability",
+    "marks": 7,
+    "by_type": {
+     "Objective": 1,
+     "Long Answer": 3,
+     "Short Answer": 2,
+     "Essay Type": 1
+    }
+   }
+  ],
+  "notes": "विकल्पों की योजना :- खण्ड 'स' एवं 'द' में प्रत्येक में एक आंतरिक विकल्प है। नोटः- कोष्ठक के बाहर की संख्या 'अंकों' की तथा अंदर की संख्या 'प्रश्नों' के द्योतक है।"
+ },
+ "mathematics_2025": {
+  "total_marks": 80,
+  "duration": "3 घण्टा 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "सम्बन्ध एवं फलन",
+    "name_english": "Relations and Functions",
+    "marks": 3,
+    "by_type": {
+     "MCQ": 1,
+     "LA": 2
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "प्रतिलोम त्रिकोणमिति फलन",
+    "name_english": "Inverse Trigonometric Functions",
+    "marks": 4,
+    "by_type": {
+     "Fill in the Blanks": 1,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "आव्यूह",
+    "name_english": "Matrices",
+    "marks": 5,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "सारणिक",
+    "name_english": "Determinants",
+    "marks": 5,
+    "by_type": {
+     "MCQ": 1,
+     "Fill in the Blanks": 1,
+     "SA": 3
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "सांतत्य एवं अवकलनीयता",
+    "name_english": "Continuity and Differentiability",
+    "marks": 8,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 3,
+     "Fill in the Blanks": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "अवकलज के अनुप्रयोग",
+    "name_english": "Applications of Derivatives",
+    "marks": 6,
+    "by_type": {
+     "VSA": 2,
+     "Fill in the Blanks": 1,
+     "SA": 2,
+     "MCQ": 1
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "समाकलन",
+    "name_english": "Integrals",
+    "marks": 12,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 2,
+     "Fill in the Blanks": 1,
+     "LA": 3,
+     "VLA": 4
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "समाकलनों के अनुप्रयोग",
+    "name_english": "Applications of Integrals",
+    "marks": 4,
+    "by_type": {
+     "MCQ": 1,
+     "Fill in the Blanks": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "अवकल समीकरण",
+    "name_english": "Differential Equations",
+    "marks": 6,
+    "by_type": {
+     "MCQ": 2,
+     "VLA": 3,
+     "Fill in the Blanks": 1
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "सदिश बीजगणित",
+    "name_english": "Vector Algebra",
+    "marks": 7,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 1,
+     "Fill in the Blanks": 1,
+     "SA": 2,
+     "LA": 1
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "त्रिविमीय ज्यामिति",
+    "name_english": "Three Dimensional Geometry",
+    "marks": 9,
+    "by_type": {
+     "MCQ": 1,
+     "VSA": 1,
+     "VLA": 7
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "रैखिक प्रोग्रामन",
+    "name_english": "Linear Programming",
+    "marks": 4,
+    "by_type": {
+     "VLA": 4
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "प्रायिकता",
+    "name_english": "Probability",
+    "marks": 7,
+    "by_type": {
+     "VSA": 2,
+     "MCQ": 1,
+     "Fill in the Blanks": 1,
+     "LA": 3
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "MCQ",
+    "marks_each": 1,
+    "count": 18
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 1,
+    "count": 6
+   },
+   {
+    "type": "VSA",
+    "marks_each": 1,
+    "count": 12
+   },
+   {
+    "type": "SA",
+    "marks_each": 2,
+    "count": 10
+   },
+   {
+    "type": "LA",
+    "marks_each": 3,
+    "count": 4
+   },
+   {
+    "type": "VLA",
+    "marks_each": 4,
+    "count": 3
+   }
+  ],
+  "objective_weightage": {
+   "Knowledge": 24,
+   "Understanding": 24,
+   "Application": 16,
+   "Skill": 8,
+   "Analysis": 8
+  },
+  "notes": "विकल्पों की योजना :- खण्ड 'स' एवं 'द' में प्रत्येक में एक आंतरिक विकल्प है नोटः-कोष्ठक के बाहर की संख्या 'अंकों' की तथा अंदर की संख्या 'प्रश्नों' के द्योतक है। यह ब्लू प्रिंट केवल मॉडल प्रश्न पत्र का है, बोर्ड का प्रश्न पत्र निर्धारित पाठ्यक्रम एवं अंक योजनानुसार ही होगा।"
+ },
+ "mathematics_2026": {
+  "total_marks": 80,
+  "duration": "3 hours 15 minutes",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "सम्बन्ध एवं फलन",
+    "name_english": "Relations and Functions",
+    "marks": 3,
+    "by_type": {
+     "MCQ": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "प्रतिलोम त्रिकोणमिति फलन",
+    "name_english": "Inverse Trigonometric Functions",
+    "marks": 4,
+    "by_type": {
+     "MCQ": 1,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "आव्यूह",
+    "name_english": "Matrices",
+    "marks": 5,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "सारणिक",
+    "name_english": "Determinants",
+    "marks": 5,
+    "by_type": {
+     "MCQ": 2,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "सांतत्य एवं अवकलनीयता",
+    "name_english": "Continuity and Differentiability",
+    "marks": 8,
+    "by_type": {
+     "MCQ": 3,
+     "VSA": 4,
+     "SA": 1
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "अवकलज के अनुप्रयोग",
+    "name_english": "Application of Derivatives",
+    "marks": 6,
+    "by_type": {
+     "VSA": 1,
+     "MCQ": 1,
+     "SA": 4
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "समाकलन",
+    "name_english": "Integrals",
+    "marks": 12,
+    "by_type": {
+     "MCQ": 3,
+     "VSA": 2,
+     "LA": 3,
+     "ET": 4
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "समाकलनों के अनुप्रयोग",
+    "name_english": "Application of Integrals",
+    "marks": 4,
+    "by_type": {
+     "MCQ": 1,
+     "VSA": 1,
+     "SA": 2
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "अवकल समीकरण",
+    "name_english": "Differential Equations",
+    "marks": 6,
+    "by_type": {
+     "MCQ": 3,
+     "LA": 3
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "सदिश बीजगणित",
+    "name_english": "Vector Algebra",
+    "marks": 7,
+    "by_type": {
+     "MCQ": 4,
+     "VSA": 3
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "त्रिविमीय ज्यामिति",
+    "name_english": "Three Dimensional Geometry",
+    "marks": 9,
+    "by_type": {
+     "MCQ": 1,
+     "VSA": 1,
+     "LA": 3,
+     "ET": 4
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "रैखिक प्रोग्रामन",
+    "name_english": "Linear Programming",
+    "marks": 4,
+    "by_type": {
+     "ET": 4
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "प्रायिकता",
+    "name_english": "Probability",
+    "marks": 7,
+    "by_type": {
+     "MCQ": 1,
+     "VSA": 1,
+     "SA": 1,
+     "LA": 3
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "Multiple Choice Questions (MCQ)",
+    "marks_each": 1,
+    "count": 18
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 1,
+    "count": 6
+   },
+   {
+    "type": "Very Short Answer (VSA)",
+    "marks_each": 1,
+    "count": 12
+   },
+   {
+    "type": "Short Answer (SA)",
+    "marks_each": 2,
+    "count": 10
+   },
+   {
+    "type": "Long Answer (LA)",
+    "marks_each": 3,
+    "count": 4
+   },
+   {
+    "type": "Essay Type (ET)",
+    "marks_each": 4,
+    "count": 3
+   }
+  ],
+  "objective_weightage": {
+   "Knowledge": 24,
+   "Understanding": 24,
+   "Application": 16,
+   "Skill": 8,
+   "Analysis": 8
+  },
+  "notes": "The blueprint indicates internal choices in sections 'C' and 'D'. The numbers outside the brackets denote 'marks' and inside denote 'questions'. This blueprint is a model for understanding question types; the actual blueprint may vary. There are inconsistencies between the summary table (Page 1, Section 2) and the detailed blueprint table (Page 2) regarding the total marks for Multiple Choice Questions (MCQ), Fill in the Blanks, and Short Answer (SA) types. Specifically, the total marks for MCQ, Fill in the Blanks, and SA from the detailed blueprint table's 'योग' row (25, 14, 28 respectively) do not match the summary table's totals (18, 6, 20 respectively). Additionally, some entries in the detailed blueprint table imply marks per question that contradict the stated 'marks_each' from the summary table (e.g., '1(2)' for SA type implies 0.5 marks per question, '6(2)' for MCQ type implies 3 marks per question, '4(2)' for VSA type implies 2 marks per question)."
+ },
+ "physics_2023": {
+  "total_marks": 56,
+  "duration": "3 घण्टे 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "वैद्युत आवेश तथा क्षेत्र",
+    "name_english": "Electric Charges and Fields",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 1,
+     "लघूत्तरात्मक": 1,
+     "दीर्घ-उत्तरीय": 1
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "स्थिर वैद्युत विभव तथा धारिता",
+    "name_english": "Electrostatic Potential and Capacitance",
+    "marks": 3,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "विद्युत धारा",
+    "name_english": "Current Electricity",
+    "marks": 5,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 3,
+     "दीर्घ-उत्उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "गतिमान आवेश और चुम्बकत्व",
+    "name_english": "Moving Charges and Magnetism",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 3
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "चुम्बकत्व एवं द्रव्य",
+    "name_english": "Magnetism and Matter",
+    "marks": 3,
+    "by_type": {
+     "वस्तुनिष्ठ": 2,
+     "अति लघू.": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "वैद्युत चुम्बकीय प्रेरण",
+    "name_english": "Electromagnetic Induction",
+    "marks": 3,
+    "by_type": {
+     "वस्तुनिष्ठ": 2,
+     "अति लघू.": 1,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "प्रत्यावर्ती धारा",
+    "name_english": "Alternating Current",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 0,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 3,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "वैद्युत चुम्बकीय तंरगे",
+    "name_english": "Electromagnetic Waves",
+    "marks": 2,
+    "by_type": {
+     "वस्तुनिष्ठ": 2,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "किरण प्रकाशिकी एवं प्रकाशिक मंत्र",
+    "name_english": "Ray Optics and Optical Instruments",
+    "marks": 7,
+    "by_type": {
+     "वस्तुनिष्ठ": 2.5,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घ-उत्तरीय": 3
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "तंरग प्रकाशिकी",
+    "name_english": "Wave Optics",
+    "marks": 5,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 1,
+     "लघूत्तरात्मक": 3,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "विकिरण तथा द्रव्य की द्वैत प्रकृति",
+    "name_english": "Dual Nature of Radiation and Matter",
+    "marks": 4,
+    "by_type": {
+     "वस्तुनिष्ठ": 1,
+     "अति लघू.": 1.5,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "परमाणु",
+    "name_english": "Atoms",
+    "marks": 3,
+    "by_type": {
+     "वस्तुनिष्ठ": 0,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 3,
+     "दीर्घ-उत्तरीय": 0
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "नाभिक",
+    "name_english": "Nuclei",
+    "marks": 3,
+    "by_type": {
+     "वस्तुनिष्ठ": 0,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 3
+    }
+   },
+   {
+    "unit_no": 14,
+    "name_hindi": "अर्द्धचालक इलेक्ट्रॉनिकी – पदार्थ, युक्तियां तथा सरल परिपथ",
+    "name_english": "Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "marks": 6,
+    "by_type": {
+     "वस्तुनिष्ठ": 2,
+     "अति लघू.": 0,
+     "लघूत्तरात्मक": 0,
+     "दीर्घ-उत्तरीय": 3
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "वस्तुनिष्ठ",
+    "marks_each": 1,
+    "count": 13
+   },
+   {
+    "type": "अतिलघूत्तरात्मक",
+    "marks_each": 1,
+    "count": 8
+   },
+   {
+    "type": "लघूत्तरात्मक– I",
+    "marks_each": 1.5,
+    "count": 12
+   },
+   {
+    "type": "दीर्घउत्तरीय",
+    "marks_each": 3,
+    "count": 3
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 17.5,
+   "अवबोध": 20,
+   "अभिव्यक्ति / ज्ञानोपयोग": 12,
+   "मौलिकता / कौशल": 6.5
+  },
+  "notes": "विकल्प योजना : आन्तरिक प्रश्न संख्या 19,20. नोटः- कोष्ठक में बाहर की संख्या अंकों की तथा भीतर प्रश्नों की द्योतक है. निर्देश :- प्रश्न पत्र में मूल प्रश्न 20 हैं, जो प्रकारान्तर से कुल 38 हैं."
+ },
+ "physics_2024": {
+  "total_marks": 56,
+  "duration": "3 घण्टे 15 मिनट",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "वैद्युत आवेश तथा क्षेत्र",
+    "name_english": "Electric Charges and Fields",
+    "marks": 4,
+    "by_type": {
+     "Objective": 1.0,
+     "Short Answer": 2.0,
+     "Essay Type": 1.0
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "स्थिर वैधुत विभव तथा धारिता",
+    "name_english": "Electrostatic Potential and Capacitance",
+    "marks": 3,
+    "by_type": {
+     "Objective": 0.5,
+     "Short Answer": 1.5,
+     "Very Short Answer": 1.0
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "विद्युत धारा",
+    "name_english": "Current Electricity",
+    "marks": 4,
+    "by_type": {
+     "Objective": 0.5,
+     "Short Answer": 1.5,
+     "Very Short Answer": 2.0
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "गातिमान आवेश और चुम्बकत्व",
+    "name_english": "Moving Charges and Magnetism",
+    "marks": 4,
+    "by_type": {
+     "Objective": 1.0,
+     "Short Answer": 2.0,
+     "Essay Type": 1.0
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "चुम्बकत्व एंव द्रव्य",
+    "name_english": "Magnetism and Matter",
+    "marks": 3,
+    "by_type": {
+     "Fill in the Blanks": 0.5,
+     "Very Short Answer": 1.0,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "वैधुत चुम्बकीय प्रेरण",
+    "name_english": "Electromagnetic Induction",
+    "marks": 4,
+    "by_type": {
+     "Very Short Answer": 1.0,
+     "Short Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "प्रत्यावर्ती धारा",
+    "name_english": "Alternating Current",
+    "marks": 5,
+    "by_type": {
+     "Objective": 1.0,
+     "Long Answer": 4.0
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "वैधुत चुम्बकीय तरंगो",
+    "name_english": "Electromagnetic Waves",
+    "marks": 2,
+    "by_type": {
+     "Objective": 0.5,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "किरण प्रकाशिकी एवं प्रकाशिक यंत्र",
+    "name_english": "Ray Optics and Optical Instruments",
+    "marks": 7,
+    "by_type": {
+     "Objective": 1.5,
+     "Short Answer": 1.5,
+     "Long Answer": 3.0,
+     "Essay Type": 1.0
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "तरंग प्रकाशिकी",
+    "name_english": "Wave Optics",
+    "marks": 5,
+    "by_type": {
+     "Very Short Answer": 1.0,
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Short Answer": 3.0
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "विकिरण तथा द्रव्य की द्वैत प्रकृति",
+    "name_english": "Dual Nature of Radiation and Matter",
+    "marks": 4,
+    "by_type": {
+     "Objective": 1.0,
+     "Very Short Answer": 1.0,
+     "Fill in the Blanks": 0.5,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "परमाणु",
+    "name_english": "Atoms",
+    "marks": 4,
+    "by_type": {
+     "Fill in the Blanks": 0.5,
+     "Very Short Answer": 1.0,
+     "Objective": 1.0,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "नाभिक",
+    "name_english": "Nuclei",
+    "marks": 3,
+    "by_type": {
+     "Very Short Answer": 1.0,
+     "Objective": 0.5,
+     "Short Answer": 1.5
+    }
+   },
+   {
+    "unit_no": 14,
+    "name_hindi": "अर्द्धचालक इलेक्ट्रानिकी – पदार्थ, युक्तियाँ तथा सरल परिपथ",
+    "name_english": "Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "marks": 4,
+    "by_type": {
+     "Objective": 0.5,
+     "Fill in the Blanks": 0.5,
+     "Very Short Answer": 1.0,
+     "Essay Type": 2.0
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "Objective",
+    "marks_each": 0.5,
+    "count": 16
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "Very Short Answer",
+    "marks_each": 1,
+    "count": 8
+   },
+   {
+    "type": "Short Answer",
+    "marks_each": 1.5,
+    "count": 12
+   },
+   {
+    "type": "Long Answer",
+    "marks_each": 3,
+    "count": 3
+   },
+   {
+    "type": "Essay Type",
+    "marks_each": 4,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "Knowledge": 14,
+   "Understanding": 11,
+   "Application / Expression": 22.5,
+   "Skill / Originality": 8.5
+  },
+  "notes": "Scheme of options: Sections 'C' and 'D' each have one internal option. Note: The number outside the bracket denotes 'marks' and the number inside denotes 'questions'."
+ },
+ "physics_2025": {
+  "total_marks": 56,
+  "duration": "3 hours 15 minutes",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "विद्युत आवेश एवं क्षेत्र",
+    "name_english": "Electric Charges and Fields",
+    "marks": 4,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5,
+     "दीर्घउत्तरात्मक": 1.0
+    }
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "स्थिर विद्युत विभव तथा धारिता",
+    "name_english": "Electrostatic Potential and Capacitance",
+    "marks": 3,
+    "by_type": {
+     "लघूत्तरात्मक": 3.0
+    }
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "विद्युत धारा",
+    "name_english": "Current Electricity",
+    "marks": 4,
+    "by_type": {
+     "रिक्त स्थान": 0.5,
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5,
+     "बहुविकल्पात्मक": 0.5
+    }
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "गतिमान आवेश और चुम्बकत्व",
+    "name_english": "Moving Charges and Magnetism",
+    "marks": 4,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.0,
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "चुम्बकत्व एवं द्रव्य",
+    "name_english": "Magnetism and Matter",
+    "marks": 3,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "विद्युत चुम्बकीय प्रेरण",
+    "name_english": "Electromagnetic Induction",
+    "marks": 4,
+    "by_type": {
+     "लघूत्तरात्मक": 3.0,
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1.0
+    }
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "प्रत्यावर्ती धारा",
+    "name_english": "Alternating Current",
+    "marks": 5,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1.0,
+     "दीर्घउत्तरात्मक": 3.0,
+     "बहुविकल्पात्मक": 0.5
+    }
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "विद्युत चुम्बकीय तरंगें",
+    "name_english": "Electromagnetic Waves",
+    "marks": 2,
+    "by_type": {
+     "बहुविकल्पात्मक": 1.0
+    }
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "किरण प्रकाशिकी एवं प्रकाशिक यंत्र",
+    "name_english": "Ray Optics and Optical Instruments",
+    "marks": 7,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5,
+     "निबंधात्मक": 4.0,
+     "बहुविकल्पात्मक": 0.5
+    }
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "तरंग प्रकाशिकी",
+    "name_english": "Wave Optics",
+    "marks": 5,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1.0,
+     "बहुविकल्पात्मक": 0.5,
+     "लघूत्तरात्मक": 3.0
+    }
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "विकिरण तथा द्रव्य की द्वैत प्रकृति",
+    "name_english": "Dual Nature of Radiation and Matter",
+    "marks": 4,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 3.0
+    }
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "परमाणु",
+    "name_english": "Atoms",
+    "marks": 4,
+    "by_type": {
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5,
+     "बहुविकल्पात्मक": 1.0
+    }
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "नाभिक",
+    "name_english": "Nuclei",
+    "marks": 3,
+    "by_type": {
+     "बहुविकल्पात्मक": 0.5,
+     "अतिलघूत्तरात्मक": 1.0,
+     "लघूत्तरात्मक": 1.5
+    }
+   },
+   {
+    "unit_no": 14,
+    "name_hindi": "अर्द्धचालक इलेक्ट्रानिकी–पदार्थ, युक्तियाँ तथा सरल परिपथ",
+    "name_english": "Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "marks": 4,
+    "by_type": {
+     "रिक्त स्थान": 0.5,
+     "लघूत्तरात्मक": 1.5,
+     "अतिलघूत्तरात्मक": 1.0
+    }
+   }
+  ],
+  "question_types": [
+   {
+    "type": "बहुविकल्पात्मक",
+    "marks_each": 0.5,
+    "count": 18
+   },
+   {
+    "type": "रिक्त स्थान",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "अतिलघूत्तरात्मक",
+    "marks_each": 1.0,
+    "count": 10
+   },
+   {
+    "type": "लघूत्तरात्मक",
+    "marks_each": 1.5,
+    "count": 10
+   },
+   {
+    "type": "दीर्घउत्तरात्मक",
+    "marks_each": 3.0,
+    "count": 3
+   },
+   {
+    "type": "निबंधात्मक",
+    "marks_each": 4.0,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "ज्ञान": 17.0,
+   "अवबोध": 17.0,
+   "ज्ञानोपयोग": 11.5,
+   "कौशल": 5.0,
+   "विश्लेषण": 5.5
+  },
+  "notes": "Choice scheme: Sections 'C' and 'D' have internal choices. Note: The number outside the bracket denotes 'marks' and the number inside denotes 'questions'. This blueprint is only for the model question paper; the board's question paper will be according to the prescribed syllabus and mark scheme."
+ },
+ "physics_2026": {
+  "total_marks": 56,
+  "duration": "3 hours 15 minutes",
+  "units": [
+   {
+    "unit_no": 1,
+    "name_hindi": "वैद्युत आवेश तथा क्षेत्र",
+    "name_english": "Electric Charges and Fields",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 2,
+    "name_hindi": "स्थिरवैद्युत विभव तथा धारिता",
+    "name_english": "Electrostatic Potential and Capacitance",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 3,
+    "name_hindi": "विद्युत धारा",
+    "name_english": "Current Electricity",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 4,
+    "name_hindi": "गतिमान आवेश और चुंबकत्व",
+    "name_english": "Moving Charges and Magnetism",
+    "marks": 5,
+    "by_type": null
+   },
+   {
+    "unit_no": 5,
+    "name_hindi": "चुंबकत्व एवं द्रव्य",
+    "name_english": "Magnetism and Matter",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 6,
+    "name_hindi": "वैद्युतचुंबकीय प्रेरण",
+    "name_english": "Electromagnetic Induction",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 7,
+    "name_hindi": "प्रत्यावर्ती धारा",
+    "name_english": "Alternating Current",
+    "marks": 5,
+    "by_type": null
+   },
+   {
+    "unit_no": 8,
+    "name_hindi": "वैद्युतचुंबकीय तरंगें",
+    "name_english": "Electromagnetic Waves",
+    "marks": 2,
+    "by_type": null
+   },
+   {
+    "unit_no": 9,
+    "name_hindi": "किरण प्रकाशिकी एवं प्रकाशिक यंत्र",
+    "name_english": "Ray Optics and Optical Instruments",
+    "marks": 7,
+    "by_type": null
+   },
+   {
+    "unit_no": 10,
+    "name_hindi": "तरंग प्रकाशिकी",
+    "name_english": "Wave Optics",
+    "marks": 5,
+    "by_type": null
+   },
+   {
+    "unit_no": 11,
+    "name_hindi": "विकिरण तथा द्रव्य की द्वैत प्रकृति",
+    "name_english": "Dual Nature of Radiation and Matter",
+    "marks": 4,
+    "by_type": null
+   },
+   {
+    "unit_no": 12,
+    "name_hindi": "परमाणु",
+    "name_english": "Atoms",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 13,
+    "name_hindi": "नाभिक",
+    "name_english": "Nuclei",
+    "marks": 3,
+    "by_type": null
+   },
+   {
+    "unit_no": 14,
+    "name_hindi": "अर्धचालक इलेक्ट्रॉनिकी –पदार्थ,युक्तियाँ तथा सरल परिपथ",
+    "name_english": "Semiconductor Electronics: Materials, Devices and Simple Circuits",
+    "marks": 5,
+    "by_type": null
+   }
+  ],
+  "question_types": [
+   {
+    "type": "Multiple Choice",
+    "marks_each": 0.5,
+    "count": 18
+   },
+   {
+    "type": "Fill in the Blanks",
+    "marks_each": 0.5,
+    "count": 10
+   },
+   {
+    "type": "Very Short Answer",
+    "marks_each": 1,
+    "count": 10
+   },
+   {
+    "type": "Short Answer",
+    "marks_each": 1,
+    "count": 10
+   },
+   {
+    "type": "Long Answer",
+    "marks_each": 4,
+    "count": 3
+   },
+   {
+    "type": "Essay Type",
+    "marks_each": 5,
+    "count": 2
+   }
+  ],
+  "objective_weightage": {
+   "Knowledge": 17,
+   "Understanding": 17,
+   "Application": 12,
+   "Skill": 5,
+   "Analysis": 5
+  },
+  "notes": "Scheme of options: Sections 'C' and 'D' each have an internal option. Note: The number outside the bracket denotes 'marks' and the number inside denotes 'number of questions'. Special Note: This blueprint is for a model question paper and is only for understanding the types of questions. The actual question paper blueprint may be different."
+ }
+}

@@ -16,6 +16,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { MultiSelect } from "@/components/multi-select";
 import { api, MARKS_BUCKETS, QUESTION_TYPES, type QuestionFilter } from "@/lib/api";
+import { PREDICTION_TIERS } from "@/lib/prediction-tiers";
 
 const ORDER_LABELS: Record<QuestionFilter["order"], string> = {
   newest: "Newest first",
@@ -23,6 +24,7 @@ const ORDER_LABELS: Record<QuestionFilter["order"], string> = {
   random: "Random",
   marks_asc: "Marks ↑",
   marks_desc: "Marks ↓",
+  predicted: "Most likely next",
 };
 
 const YEAR_MIN = 2010;
@@ -77,7 +79,7 @@ export function FilterBar({
         <h2 className="text-sm font-semibold">Filters</h2>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <MultiSelect
           label="Subjects"
           options={subjects}
@@ -108,6 +110,13 @@ export function FilterBar({
           options={QUESTION_TYPES}
           value={filter.question_types}
           onChange={(v) => update("question_types", v)}
+        />
+        <MultiSelect
+          label="Repeat chance"
+          searchable={false}
+          options={PREDICTION_TIERS.map((t) => ({ value: t.id, label: t.label }))}
+          value={filter.prob_tiers}
+          onChange={(v) => update("prob_tiers", v)}
         />
       </div>
 

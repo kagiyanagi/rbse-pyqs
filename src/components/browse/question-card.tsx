@@ -94,15 +94,16 @@ export function QuestionCard({
         <div className="ml-auto">
           <ProbabilityButton
             stats={q.chapter_stats}
+            prediction={q.prediction}
             expanded={probExpanded}
             onToggle={() => setProbExpanded((v) => !v)}
           />
         </div>
       </div>
 
-      {probExpanded && q.chapter_stats && (
+      {probExpanded && (q.chapter_stats || q.prediction) && (
         <div className="mt-3">
-          <ProbabilityPanel stats={q.chapter_stats} />
+          <ProbabilityPanel stats={q.chapter_stats} prediction={q.prediction} />
         </div>
       )}
 

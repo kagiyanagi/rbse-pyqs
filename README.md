@@ -152,6 +152,74 @@ src/
     └── use-settings.ts
 ```
 
+## Predicting what comes next (PCM)
+
+Every current-syllabus Physics, Chemistry and Mathematics question carries three numbers for the
+next main paper: the chance that **this or a very similar question** is asked, that a
+**near-verbatim copy** is asked, and that **any question on its topic** is asked. Expand the badge
+to see every past appearance (real papers and official model papers), the chapter's marks in the
+board's official blueprint and in recent papers, and how much of recent papers were repeats. Sort by
+**Most likely next** for a study list ranked by that chance, one card per question family; combine it
+with a marks target to pack a "most likely" paper. The **Repeat chance** filter keeps only the bands you
+pick (High is 20% or more, Above average 10 to 20%, Average 4 to 10%, Low under 4%); it applies to PCM
+questions only, since Hindi and English have no prediction.
+
+The numbers come from `scripts/predict/build_predictions.py`:
+
+1. **Evidence.** Real papers (main, set 2, supplementary) plus the official RBSE model papers, which
+   the extraction pipeline stores as `paper_type = "model"`. "OR" alternatives are weighted so a
+   choice between two questions counts as one slot.
+2. **Families and topics.** Near-duplicates are clustered into families with a lexical similarity
+   (character n-gram TF-IDF on the English/maths text plus topic-keyword overlap, never across
+   chapters), so different compounds or constants stay different questions. Related questions are
+   grouped into topics with a semantic similarity that can blend Gemini embeddings
+   (`embed_questions.py`).
+3. **Recurrence.** Each family gets a recency-decayed count of its appearances, with partial credit for
+   related questions and a fitted weight for model papers; each chapter's expected number of
+   questions is split over its families in proportion to that score and multiplied by the measured
+   reuse rate. The topic layer runs the same kernel at topic granularity.
+4. **Blueprint.** The official blueprint tables that precede each model paper are parsed by
+   `parse_blueprints.py` and give the chapter marks; recent papers give the range.
+5. **Honest backtests.** Every backtest mirrors the real situation for the target year: the newest
+   real paper is two years old and the newest model paper one year old. Hyper-parameters are tuned by
+   out-of-sample log-loss on older target years; the last two real papers are held out and reported
+   (AUC, log-loss, coverage of the paper by the top-K predicted families, calibration). A logistic
+   stacker over the chapter kernel, the slot-aware kernel and the topic layer is used only where it
+   beats the kernel on those held-out years.
+
+```bash
+pip install -r scripts/predict/requirements.txt
+python scripts/predict/merge_model_papers.py --base ../rbse-qbank/questions.db --extra <unfiltered-latex.db> --out ../questions.db
+GEMINI_API_KEY=...  python scripts/predict/parse_blueprints.py --pdf-dir <dir of <subject>_<yy>.pdf blueprint pages>
+GEMINI_API_KEYS=k1,k2 python scripts/predict/embed_questions.py --db ../questions.db --out scripts/predict/emb   # optional
+python scripts/predict/build_predictions.py --embeddings scripts/predict/emb                                    # writes src/data/predictions.json
+```
+
+Re-run the last step whenever `questions.db` is rebuilt. Hindi and English keep the older
+chapter-level badge.
+
+Current backtest (target 2027, held-out real papers 2024 and 2025, newest real paper two years old):
+
+| Subject | AUC | top-100 families cover | ceiling | topic AUC | top-100 topics cover |
+|---|---|---|---|---|---|
+| Physics | 0.71 | 22% / 9% | 37% / 34% | 0.80 / 0.70 | 55% / 45% |
+| Chemistry | 0.78 | 15% / 13% | 23% / 30% | 0.80 / 0.78 | 38% / 45% |
+| Mathematics | 0.78 (stacker) | 29% / 21% | 37% / 40% | 0.79 / 0.82 | 72% / 71% |
+
+Findings baked into the defaults: official model papers are useful evidence for physics and maths but
+the board does not copy them into the real paper (under 6% of a real physics or chemistry paper matches
+its model paper, about 15% for maths); Gemini embeddings lowered every AUC and stay off; slot-aware
+allocation by marks bucket lost to chapter-level allocation in all three subjects.
+
+Held-out results for the 2027 build (2024 and 2025 real papers, forecast as if from two years
+earlier): question-family AUC 0.71 physics, 0.78 chemistry, 0.78 mathematics against a constant
+baseline of 0.5; topic-level AUC 0.68 to 0.81. Studying the top 100 predicted families covered 13 to
+26 percent of those papers, against a ceiling of 23 to 40 percent (the share of each paper that
+repeats anything from the available history); the top 100 topics covered 34 to 71 percent. Gemini
+embeddings were evaluated and rejected: blended into the similarity they lowered AUC in chemistry and
+mathematics because the "same question" here is entity-specific (a different compound or constant is a
+different question), which lexical similarity respects.
+
 ## Exporting a question list
 
 The **Export** button sits next to the search box in Browse, and next to **Clear**
@@ -198,7 +266,8 @@ Devanagari font; the generated preamble says so and sets up `fontspec` for you.
 | Floating text-size popover (question + UI scales) | ✅ |
 | Customizable AI prompt template | ✅ |
 | GA4 (via `NEXT_PUBLIC_GA_ID`) | ✅ |
-| Export results to PDF / Markdown / LaTeX | ✅ new |
+| Export results to PDF / Markdown / LaTeX | ✅ |
+| Question-level repeat chance + "Most likely next" sort (PCM) | ✅ new |
 | Multi-DB switcher (`?db=`) | ❌ dropped - single Turso DB |
 
 LocalStorage keys are unchanged from the Flask app (`rbse_bookmarks`, `theme`, `geminiKey`, etc.) - switching domains will not preserve them, but staying on the same domain will.

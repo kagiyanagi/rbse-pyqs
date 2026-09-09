@@ -71,7 +71,7 @@ export function buildWhere(searchParams: URLSearchParams): SQL | undefined {
 }
 
 export function parseOrder(s: string | null): SortOrder {
-  if (s === "oldest" || s === "random" || s === "marks_asc" || s === "marks_desc") return s;
+  if (s === "oldest" || s === "random" || s === "marks_asc" || s === "marks_desc" || s === "predicted") return s;
   return "newest";
 }
 

@@ -1,4 +1,4 @@
-import type { QuestionsResponse, StatsResponse } from "@/types";
+import type { QuestionsResponse, SortOrder, StatsResponse } from "@/types";
 
 async function getJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -27,6 +27,7 @@ export const api = {
     for (const t of filter.topics) sp.append("topics", t);
     for (const m of filter.marks_list) sp.append("marks_list", m);
     for (const q of filter.question_types) sp.append("question_types", q);
+    for (const t of filter.prob_tiers) sp.append("prob_tiers", t);
     if (filter.min_year != null) sp.set("min_year", String(filter.min_year));
     if (filter.max_year != null) sp.set("max_year", String(filter.max_year));
     sp.set("order", filter.order);
@@ -42,9 +43,11 @@ export type QuestionFilter = {
   topics: string[];
   marks_list: string[];
   question_types: string[];
+  /** repeat-chance bands, see src/lib/prediction-tiers.ts; empty = any */
+  prob_tiers: string[];
   min_year: number | null;
   max_year: number | null;
-  order: "newest" | "oldest" | "random" | "marks_asc" | "marks_desc";
+  order: SortOrder;
   count: number;
   target_marks_total: number | null;
 };
@@ -55,6 +58,7 @@ export const DEFAULT_FILTER: QuestionFilter = {
   topics: [],
   marks_list: [],
   question_types: [],
+  prob_tiers: [],
   min_year: null,
   max_year: null,
   order: "newest",

@@ -4,6 +4,8 @@ import { questions } from "@/db/schema";
 import { sql, asc, desc } from "drizzle-orm";
 import { buildWhere, getMulti, parseInt32, parseFloatClamp, parseOrder } from "@/lib/filters";
 import { getProbCache } from "@/lib/prob-cache";
+import { getQuestionPrediction } from "@/lib/predictions";
+import { parsePredictionTiers, predictionTierOf } from "@/lib/prediction-tiers";
 import {
   CANONICAL_SUBJECTS,
   OUT_OF_SYLLABUS,
@@ -11,6 +13,47 @@ import {
 } from "@/lib/syllabus";
 import { getChapterAliases } from "@/lib/syllabus-aliases";
 import { chapterKey, type QuestionPayload, type QuestionsResponse } from "@/types";
+
+type Row = typeof questions.$inferSelect;
+
+/** Greedy pack in the given order until the marks total reaches the target (±0.5). */
+function packToMarks(candidates: Row[], target: number): Row[] {
+  const selected: Row[] = [];
+  let total = 0;
+  for (const r of candidates) {
+    const m = r.marks ?? 0;
+    if (total + m > target + 0.5) continue;
+    selected.push(r);
+    total += m;
+    if (total >= target - 0.5) break;
+  }
+  return selected;
+}
+
+/**
+ * Rank by the chance of recurring in the next main paper, keeping one row per
+ * question family so near-duplicates from different years do not crowd the list.
+ * Rows without a prediction (non-PCM, out of syllabus) sink to the bottom.
+ */
+function rankByPrediction(candidates: Row[]): Row[] {
+  const scored = candidates.map((r) => ({ r, pred: getQuestionPrediction(r.id) }));
+  scored.sort(
+    (a, b) =>
+      (b.pred?.p ?? -1) - (a.pred?.p ?? -1) ||
+      (b.r.year ?? 0) - (a.r.year ?? 0) ||
+      b.r.id - a.r.id,
+  );
+  const seenFamilies = new Set<string>();
+  const ranked: Row[] = [];
+  for (const { r, pred } of scored) {
+    if (pred) {
+      if (seenFamilies.has(pred.fid)) continue;
+      seenFamilies.add(pred.fid);
+    }
+    ranked.push(r);
+  }
+  return ranked;
+}
 
 export async function GET(request: NextRequest) {
   const sp = new URLSearchParams(request.nextUrl.searchParams);
@@ -30,9 +73,6 @@ export async function GET(request: NextRequest) {
         if (!subj) continue;
         const variants = aliases.get(`${subj}|${ch}`) ?? [];
         for (const v of variants) expanded.add(v);
-        if (isOOS) {
-          // already included via OUT_OF_SYLLABUS key above
-        }
       }
       if (!isOOS) expanded.add(ch); // honour exact-match too
     }
@@ -45,6 +85,9 @@ export async function GET(request: NextRequest) {
   const order = parseOrder(sp.get("order"));
   const count = parseInt32(sp.get("count"), 10, 1, 5000);
   const targetMarksRaw = sp.get("target_marks_total");
+  const targetMarks = targetMarksRaw ? parseFloatClamp(targetMarksRaw, 30, 1, 200) : null;
+  // Repeat-chance bands live in the prediction JSON, not in Turso, so they are applied in-process.
+  const tiers = parsePredictionTiers(getMulti(sp, "prob_tiers"));
 
   const orderBy = (() => {
     switch (order) {
@@ -64,21 +107,21 @@ export async function GET(request: NextRequest) {
   const baseQuery = db.select().from(questions);
   const filtered = where ? baseQuery.where(where) : baseQuery;
 
-  type Row = typeof questions.$inferSelect;
   let rows: Row[];
-  if (targetMarksRaw) {
-    const target = parseFloatClamp(targetMarksRaw, 30, 1, 200);
-    const candidates = (await filtered.orderBy(...orderBy).limit(500)) as Row[];
-    const selected: Row[] = [];
-    let total = 0;
-    for (const r of candidates) {
-      const m = r.marks ?? 0;
-      if (total + m > target + 0.5) continue;
-      selected.push(r);
-      total += m;
-      if (total >= target - 0.5) break;
+  if (order === "predicted" || tiers.size > 0) {
+    let candidates = (await filtered.orderBy(...orderBy).limit(6000)) as Row[];
+    if (tiers.size > 0) {
+      // rows without a prediction (Hindi, English, out of syllabus) have no band and drop out
+      candidates = candidates.filter((r) => {
+        const pred = getQuestionPrediction(r.id);
+        return pred !== null && tiers.has(predictionTierOf(pred.p));
+      });
     }
-    rows = selected;
+    if (order === "predicted") candidates = rankByPrediction(candidates);
+    rows = targetMarks != null ? packToMarks(candidates, targetMarks) : candidates.slice(0, count);
+  } else if (targetMarks != null) {
+    const candidates = (await filtered.orderBy(...orderBy).limit(500)) as Row[];
+    rows = packToMarks(candidates, targetMarks);
   } else {
     rows = (await filtered.orderBy(...orderBy).limit(count)) as Row[];
   }
@@ -103,6 +146,7 @@ export async function GET(request: NextRequest) {
       question_text: r.questionText,
       question_latex: latex,
       chapter_stats: stats,
+      prediction: getQuestionPrediction(r.id),
     };
   });
 

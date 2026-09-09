@@ -44,3 +44,9 @@ next-env.d.ts
 # Local env (Turso credentials)
 .env.local
 .env*.local
+
+# local python env for scripts/predict
+.venv/
+
+# python bytecode from scripts/predict
+__pycache__/
