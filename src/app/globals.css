@@ -294,3 +294,181 @@
   overflow-y: hidden;
 }
 .solution-prose .katex { font-size: 1.05em; }
+/* ---------------------------------------------------------------------------
+   Print / Save-as-PDF export
+   `#print-root` is portalled to <body> by PrintDocument, so hiding every other
+   top-level node gives a clean document with no app chrome. It only exists in
+   the DOM while a print job is running.
+--------------------------------------------------------------------------- */
+
+#print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 14mm 18mm;
+  }
+
+  body > *:not(#print-root) {
+    display: none !important;
+  }
+
+  html {
+    /* Ignore the user's UI scale; the page size is fixed. */
+    font-size: 100% !important;
+    scroll-behavior: auto;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    transition: none !important;
+  }
+
+  #print-root {
+    display: block !important;
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .print-header {
+    border-bottom: 1px solid #000;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+  }
+
+  .print-header h1 {
+    font-size: 16pt;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .print-header p {
+    font-size: 9pt;
+    margin: 0.3em 0 0;
+  }
+
+  .print-list {
+    list-style: decimal;
+    margin: 0;
+    padding-left: 1.6em;
+  }
+
+  .print-question {
+    margin-bottom: 1.1em;
+    padding-bottom: 0.6em;
+    /* Keep a question with its own heading; long ones may still split. */
+    break-inside: avoid-page;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .print-question-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.6em;
+    font-size: 8.5pt;
+    margin-bottom: 0.3em;
+  }
+
+  .print-meta {
+    font-weight: 700;
+  }
+
+  .print-chapter {
+    font-style: italic;
+  }
+
+  .print-prose {
+    /* Question text is whitespace-significant, but markdown paragraphs already
+       carry the line structure, so only long unbreakable tokens need help. */
+    overflow-wrap: break-word;
+  }
+
+  .print-prose p {
+    margin: 0.35em 0;
+  }
+
+  .print-prose h1,
+  .print-prose h2,
+  .print-prose h3,
+  .print-prose h4 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 0.5em 0 0.2em;
+    break-after: avoid;
+  }
+
+  .print-prose ul,
+  .print-prose ol {
+    margin: 0.3em 0;
+    padding-left: 1.4em;
+  }
+
+  .print-prose table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.4em 0;
+  }
+
+  .print-prose th,
+  .print-prose td {
+    border: 1px solid #000;
+    padding: 0.25em 0.4em;
+    text-align: left;
+  }
+
+  .print-prose code {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 0.9em;
+  }
+
+  .print-prose pre {
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+
+  /* KaTeX: let display math wrap onto the page instead of being clipped by the
+     scroll container it uses on screen. */
+  .print-prose .katex-display {
+    margin: 0.5em 0;
+    overflow: visible !important;
+    break-inside: avoid;
+  }
+
+  .print-prose .katex {
+    font-size: 1em;
+    white-space: normal;
+  }
+
+  .print-prose .katex-display > .katex {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .print-note,
+  .print-solution {
+    border-left: 2px solid #000;
+    margin-top: 0.5em;
+    padding-left: 0.7em;
+    font-size: 10pt;
+  }
+
+  .print-solution {
+    break-inside: auto;
+  }
+
+  .print-answer-space {
+    border-bottom: 1px dashed #999;
+    margin-top: 0.4em;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
