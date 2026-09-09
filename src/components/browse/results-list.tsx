@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QuestionCard } from "./question-card";
+import { ExportDialog } from "@/components/export/export-dialog";
 import { useAnswered } from "@/hooks/use-answered";
 import { useHideAnswered } from "@/hooks/use-settings";
 import { useCardKeyboardNav } from "@/hooks/use-card-keyboard-nav";
@@ -77,13 +78,20 @@ export function ResultsList({
           {questions.length !== visible.length ? ` of ${questions.length}` : ""} ·{" "}
           <span className="font-medium text-foreground">{totalMarks}</span> marks total
         </div>
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search in results…"
-            value={searchQuery}
-            onChange={(e) => onSearchQueryChange(e.target.value)}
-            className="pl-8"
+        <div className="flex w-full items-center gap-2 sm:w-auto">
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search in results…"
+              value={searchQuery}
+              onChange={(e) => onSearchQueryChange(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          <ExportDialog
+            questions={visible}
+            defaultTitle="RBSE Question Bank"
+            triggerClassName="shrink-0"
           />
         </div>
       </div>

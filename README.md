@@ -128,11 +128,13 @@ src/
 ├── lib/
 │   ├── filters.ts           # search-param parsing + marks "5+" buckets
 │   ├── prob-cache.ts        # per-chapter probability stats (in-process cache)
+│   ├── export.ts            # display text, markdown/LaTeX writers, math-safe escaping
 │   ├── gemini.ts            # client-side SSE stream helper + prompt template fill
 │   └── api.ts               # typed fetch wrappers
 ├── components/
 │   ├── browse/              # FilterBar, ResultsList, QuestionCard, ProbabilityBadge
 │   ├── bookmarks/           # BookmarksTab
+│   ├── export/              # ExportDialog + print-only PrintDocument
 │   ├── settings/            # SettingsModal
 │   ├── solution/            # SolutionModal (streaming AI answer)
 │   ├── multi-select.tsx     # popover + search + checkboxes
@@ -149,6 +151,33 @@ src/
     ├── use-language.ts
     └── use-settings.ts
 ```
+
+## Exporting a question list
+
+The **Export** button sits next to the search box in Browse, and next to **Clear**
+in Bookmarks. It exports exactly what is on screen - the filtered, searched list,
+with hidden-answered questions already removed.
+
+| Format | How it works | Use it for |
+|---|---|---|
+| **PDF** | Opens the browser print dialog on a print-only view; choose "Save as PDF" | Handouts, revision sheets, anything you print |
+| **Markdown** (`.md`) | Downloads a file with math left in `$…$` / `$$…$$` | Obsidian, Notion, GitHub, further editing |
+| **LaTeX** (`.tex`) | Downloads a compilable document | Typesetting a real paper |
+
+Options: title, language (per-card, English, हिन्दी, or both), whether to include
+chapter/topic, your notes and saved AI solutions, and how much blank answer space
+to leave under each question.
+
+Math is typeset with KaTeX rather than MathJax, because KaTeX renders
+synchronously and is therefore fully laid out before the print dialog opens.
+Question text is plain text that happens to contain LaTeX, so markdown specials
+outside math spans (`_`, `*`, a leading `#`) are escaped and the math spans are
+passed through untouched - subscripts stay subscripts instead of turning into
+italics. `\(…\)` and `\[…\]` are rewritten to the dollar forms, which is all
+remark-math understands.
+
+A `.tex` export containing Devanagari needs XeLaTeX or LuaLaTeX plus a
+Devanagari font; the generated preamble says so and sets up `fontspec` for you.
 
 ## Feature parity vs the Flask version
 
@@ -169,6 +198,7 @@ src/
 | Floating text-size popover (question + UI scales) | ✅ |
 | Customizable AI prompt template | ✅ |
 | GA4 (via `NEXT_PUBLIC_GA_ID`) | ✅ |
+| Export results to PDF / Markdown / LaTeX | ✅ new |
 | Multi-DB switcher (`?db=`) | ❌ dropped - single Turso DB |
 
 LocalStorage keys are unchanged from the Flask app (`rbse_bookmarks`, `theme`, `geminiKey`, etc.) - switching domains will not preserve them, but staying on the same domain will.

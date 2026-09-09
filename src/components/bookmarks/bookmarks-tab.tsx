@@ -28,6 +28,7 @@ import { useSolutionCache } from "@/hooks/use-solutions";
 import { useCardKeyboardNav } from "@/hooks/use-card-keyboard-nav";
 import { QuestionCard } from "@/components/browse/question-card";
 import { MultiSelect } from "@/components/multi-select";
+import { ExportDialog } from "@/components/export/export-dialog";
 import { api } from "@/lib/api";
 import type { QuestionPayload } from "@/types";
 
@@ -329,6 +330,10 @@ export function BookmarksTab({ onSolution }: { onSolution: (q: QuestionPayload) 
                 Shuffle
               </Button>
             )}
+            <ExportDialog
+              questions={visibleQuestions}
+              defaultTitle={`RBSE Q-Bank — ${active}`}
+            />
             <Button
               variant="outline"
               size="sm"
