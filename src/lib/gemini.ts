@@ -17,6 +17,16 @@ export class GeminiApiError extends Error {
     this.raw = raw;
     this.retryAfterSec = parseRetryAfter(raw);
   }
+
+  /**
+   * A deleted, mistyped or project-disabled key comes back as 400 API_KEY_INVALID
+   * rather than 401, so it has to be recognised by body before it can be treated
+   * as a key fault instead of a bad prompt.
+   */
+  get isKeyFault(): boolean {
+    if (this.status === 401 || this.status === 403) return true;
+    return this.status === 400 && /API_KEY_INVALID|API key not valid/i.test(this.raw);
+  }
 }
 
 function parseRetryAfter(raw: string): number | undefined {
@@ -47,10 +57,12 @@ export function formatGeminiError(err: unknown): FriendlyError {
         retryAfterSec: err.retryAfterSec,
       };
     }
-    if (err.status === 401 || err.status === 403) {
+    if (err.isKeyFault) {
       return {
         title: "API key rejected",
-        hint: "Your Gemini key is missing, expired, or restricted. Update it in Settings → Gemini API key.",
+        hint:
+          "None of your Gemini keys worked. A key that was deleted or mistyped reports this. " +
+          "Remove the dead ones in Settings → Gemini API keys and keep one you just created.",
         raw,
         status: err.status,
       };
@@ -167,7 +179,7 @@ export async function* streamGeminiWithRotation(
         if (e.status === 429) {
           geminiKeyRotator.markCooldown(key, e.retryAfterSec ?? 60);
         }
-        const rotatable = e.status === 429 || e.status === 401 || e.status === 403;
+        const rotatable = e.status === 429 || e.isKeyFault;
         if (rotatable && attempt + 1 < order.length) {
           opts.onKeyAdvance?.({
             fromIndex: index,
