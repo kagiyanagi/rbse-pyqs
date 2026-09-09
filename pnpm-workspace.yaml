@@ -1,3 +1,13 @@
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+# Which dependencies may run install/postinstall scripts.
+# better-sqlite3 compiles a native binding that scripts/migrate-from-sqlite.ts
+# needs; esbuild fetches the platform binary that tsx and drizzle-kit run on.
+# The rest only do optional setup this project never uses, and sharp is skipped
+# on purpose because image optimization is handled by Vercel.
+allowBuilds:
+  '@firebase/util': false
+  better-sqlite3: true
+  esbuild: true
+  msw: false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false
